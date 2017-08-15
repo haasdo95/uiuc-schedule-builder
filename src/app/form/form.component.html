@@ -1,0 +1,16 @@
+<form [formGroup]="formModel" (ngSubmit)="generate()">
+    <button (click)="oneMoreLess(-1)" type="button" class="btn btn-danger 
+            waves-effect waves-light">One More Class!</button>
+    <ul formArrayName="classes">
+        <li *ngFor="let e of formModel.controls['classes'].controls; let i=index"> 
+            <div class="md-form form-inline">
+                <label for="_{{i}}" class="mr-3">Course {{i + 1}}:</label>   
+                <input type="text" id="_{{i}}"
+                    name="_{{i}}" class="form-control d-inline" [formControlName]="i">
+                <button (click)="oneMoreLess(i)" 
+                    class="btn-floating btn-danger btn-sm my-0 waves-effect waves-light">
+                    <i class="fa fa-times"></i></button>
+            </div>
+        </li>
+    </ul>
+</form>

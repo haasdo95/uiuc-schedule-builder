@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+.fc-today {
+    background: #FFF !important;
+    border: none !important;
+    border-top: 1px solid #ddd !important;
+    font-weight: bold;
+}
+
+ul
+{
+    list-style-type: none;
+}
