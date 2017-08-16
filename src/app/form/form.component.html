@@ -1,16 +1,28 @@
 <form [formGroup]="formModel" (ngSubmit)="generate()">
-    <button (click)="oneMoreLess(-1)" type="button" class="btn btn-danger 
-            waves-effect waves-light">One More Class!</button>
-    <ul formArrayName="classes">
-        <li *ngFor="let e of formModel.controls['classes'].controls; let i=index"> 
-            <div class="md-form form-inline">
-                <label for="_{{i}}" class="mr-3">Course {{i + 1}}:</label>   
-                <input type="text" id="_{{i}}"
-                    name="_{{i}}" class="form-control d-inline" [formControlName]="i">
-                <button (click)="oneMoreLess(i)" 
-                    class="btn-floating btn-danger btn-sm my-0 waves-effect waves-light">
-                    <i class="fa fa-times"></i></button>
-            </div>
-        </li>
-    </ul>
+    <div class="row">
+        <div class="col-lg-6">
+            <button (click)="oneMoreLess(-1)" type="button" class="btn btn-danger 
+                waves-effect waves-light">One More Class!</button>
+        </div>
+        <div class="col-lg-6">
+            <button (click)="generate()" type="button" class="btn btn-info 
+                waves-effect waves-light">generate schedule!</button>
+        </div>
+        <div class="col-sm-12">
+            <ul class="mt-3" formArrayName="classes">
+                <li *ngFor="let e of formModel.controls['classes'].controls; let i=index"> 
+                    <div class="md-form form-inline">
+                        <label for="_{{i}}" class="mr-3">Course {{i + 1}}:</label>   
+                        <input type="text" id="_{{i}}"
+                            name="_{{i}}" class="form-control d-inline" [formControlName]="i">
+                        <button (click)="oneMoreLess(i)" 
+                            class="btn-floating btn-danger btn-sm my-0 waves-effect waves-light">
+                            <i class="fa fa-times"></i></button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    
+    
 </form>
