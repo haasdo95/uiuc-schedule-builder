@@ -43,7 +43,6 @@ export class FormComponent implements OnInit, OnDestroy {
 
     /**
      * This method gets called when the "GENERATE" button is hit.
-     * 
      * TODO: Data sanitizing should also happen here.
      */
     generate() {
@@ -77,6 +76,7 @@ export class FormComponent implements OnInit, OnDestroy {
 
     /**
      * A method to handle autocomplete
+     * TODO: implement the whole thing
      */
     handleAutocomplete() {
         for (const ctrl of this.classesFormArray.controls) {
@@ -86,7 +86,7 @@ export class FormComponent implements OnInit, OnDestroy {
                     .map(txt => txt.toUpperCase())
                     .subscribe((prefix) => {
                         console.log(this.cis.getCourseListMock()
-                                            .filter((course) => course.startsWith(prefix)));
+                                            .getWordsWithPrefix(prefix))
                     }
                 )
             );

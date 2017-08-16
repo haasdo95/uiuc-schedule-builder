@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http'
+import { Trie } from './trie'
 
 import 'rxjs/add/operator/toPromise';
 
@@ -16,8 +17,8 @@ export class CourseInfoService {
 
     constructor(private http: Http) { }
 
-    getCourseListMock() {
-        return pseudo_course_list;
+    getCourseListMock(): Trie {
+        return new Trie(pseudo_course_list);
     }
 
     getCoursesInfoByNameMock(names: string[]): Promise<Class[]> {
