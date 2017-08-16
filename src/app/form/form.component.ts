@@ -1,11 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormGroup, FormControl, FormArray } from '@angular/forms'
+import { CourseInfoService } from '../course-info.service'
+import { Class } from '../class-section'
+
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
-  styleUrls: ['./form.component.css']
+  styleUrls: ['./form.component.css'],
+  providers: [CourseInfoService]
 })
 export class FormComponent implements OnInit {
+
+    @Output() courses: EventEmitter<Class[]> = new EventEmitter();
 
     classesFormArray = new FormArray([
         new FormControl(),
@@ -27,10 +33,23 @@ export class FormComponent implements OnInit {
     }
 
     generate() {
-        console.log("GENERATING");
+        // Data sanitizing could also happen here.
+        var courses: string[] = [];
+        for (const ctrl of this.classesFormArray.controls) {
+            if (ctrl.value) {
+                courses.push(ctrl.value);
+            }
+        }
+        this.handleCourses(courses);
     }
 
-    constructor() { }
+    handleCourses(courses: string[]) {
+        this.cis.getCoursesInfoByNameMock(courses).then(classes => {
+            this.courses.emit(classes);
+        })
+    }
+
+    constructor(private cis: CourseInfoService) { }
 
     ngOnInit() {
     }
