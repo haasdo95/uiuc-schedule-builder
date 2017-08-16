@@ -1,5 +1,12 @@
 import { Class } from './class-section'
 
+export const pseudo_course_list: string[] = [
+    'CS 125', 'CS 225', 'CS 173',
+    'CSE 125', 'CSE 173',
+    'THEA 173',
+    'PHYS 211', 'PHYS 225'
+]
+
 export const pseudo_db: Class[] = [
     // course
     {
