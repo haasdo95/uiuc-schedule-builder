@@ -1,0 +1,10 @@
+<div class="container">
+    <div class="row">
+        <div *ngFor="let hint of hints" class="col-xs-2">
+            <button (click)="fillOut(hint)" type="button" 
+                class="dontBlur btn btn-outline-info btn-sm waves-effect">
+                {{hint}}
+            </button>
+        </div>
+    </div>
+</div>

@@ -10,15 +10,22 @@
         </div>
         <div class="col-sm-12">
             <ul class="mt-3" formArrayName="classes">
-                <li *ngFor="let e of formModel.controls['classes'].controls; let i=index"> 
-                    <div class="md-form form-inline">
+                <li class="mb-4" *ngFor="let c of formModel.controls['classes'].controls; let i=index"> 
+                    <div class="md-form input-group">
                         <label for="_{{i}}" class="mr-3">Course {{i + 1}}:</label>   
-                        <input type="text" id="_{{i}}"
+                        <input (keydown.tab)="fillWithFirst(c, i, $event)" (keydown.enter)="fillWithFirst(c, i, $event)"
+                            (focus)="showHints(c.value, i)" (blur)="hideHints($event, i)" type="text" id="_{{i}}"
                             name="_{{i}}" class="form-control d-inline" [formControlName]="i">
-                        <button (click)="oneMoreLess(i)" 
-                            class="btn-floating btn-danger btn-sm my-0 waves-effect waves-light">
-                            <i class="fa fa-times"></i></button>
+                        <div class="input-group-btn">
+                            <button (click)="oneMoreLess(i)"
+                                class="deleteButton btn btn-danger my-0 waves-effect waves-light">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
                     </div>
+                    <app-autocomplete-hints (chosen)="hideHints(null, $event)"
+                        [index]="i" [ctrl]="c" [hints]="hints[i]">
+                    </app-autocomplete-hints>
                 </li>
             </ul>
         </div>

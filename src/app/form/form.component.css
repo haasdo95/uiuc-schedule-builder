@@ -2,3 +2,16 @@ ul {
     list-style:none;
     padding-left:15px;
 }
+
+.md-form {
+    margin-bottom: 0px;
+}
+
+.input-group-btn {
+    padding-bottom: 2px;
+    padding-top: 2px;
+}
+
+.deleteButton {
+    border-radius: 100px;
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, Output, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, FormArray } from '@angular/forms'
 import { CourseInfoService } from '../course-info.service'
 import { Class } from '../class-section'
@@ -66,6 +66,7 @@ export class FormComponent implements OnInit, OnDestroy {
     }
 
     subscriptions: Subscription[] = [];
+    hints: string[][] = [[], [], []];
 
     reinitSubscriptions() {
         for (const sub of this.subscriptions) {
@@ -74,19 +75,48 @@ export class FormComponent implements OnInit, OnDestroy {
         this.subscriptions = [];
     }
 
+    showHints(prefix: string, idx: number) {
+        if (!prefix) {
+            this.hints[idx] = [];
+        } else {
+            this.hints[idx] = this.cis.getCourseListMock()
+                                .getWordsWithPrefix(prefix.toUpperCase());
+        }
+    }
+
+    hideHints(event, idx: number) {
+        if (!event) {
+            this.hints[idx] = [];
+            return;
+        }
+        const t = (event.relatedTarget as HTMLElement);
+        if (t && t.classList.contains('dontBlur')) {
+            return;
+        }
+        this.hints[idx] = [];
+    }
+
+    fillWithFirst(fc: FormControl, idx: number, event: Event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (!this.hints[idx] || !this.hints[idx].length) {
+            return;
+        }
+        fc.setValue(this.hints[idx][0]);
+    }
+
     /**
      * A method to handle autocomplete
      * TODO: implement the whole thing
      */
     handleAutocomplete() {
-        for (const ctrl of this.classesFormArray.controls) {
-            const fc = ctrl as FormControl;
+        for (let index = 0; index < this.classesFormArray.controls.length; ++index) {
+            const fc = this.classesFormArray.controls[index] as FormControl;
             this.subscriptions.push(
                 fc.valueChanges
                     .map(txt => txt.toUpperCase())
                     .subscribe((prefix) => {
-                        console.log(this.cis.getCourseListMock()
-                                            .getWordsWithPrefix(prefix))
+                        this.showHints(prefix, index);
                     }
                 )
             );
