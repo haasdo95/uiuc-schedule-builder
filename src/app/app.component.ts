@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CourseInfoService } from './course-info.service'
+import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+import 'rxjs/add/operator/pairwise';
 
 import { Class } from './class-section'
 
@@ -9,15 +12,41 @@ import { Class } from './class-section'
   styleUrls: ['./app.component.css'],
   providers: [ CourseInfoService ]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+
+    private dirty: boolean = false;
 
     constructor(private cis: CourseInfoService) {}
 
+    ngOnInit() {
+        this.courseNamesSubject = new Subject();
+        // Necessary because of the way pairwise works
+        this.courseNamesObservable = this.courseNamesSubject.asObservable();
+
+        this.courseNamesObservable.pairwise()
+                .subscribe(twoCourses => {
+                    if (this.isChanged(twoCourses[0], twoCourses[1])) {
+                        this.resetStateMachine();
+                    } else {
+                        this.goOnWithCurrFSM();
+                    }
+                })
+    }
+
+    resetStateMachine() {
+        console.log("NEW STUFF");
+    }
+
+    goOnWithCurrFSM() {
+        console.log("OLD STUFF");
+    }
+
     /**
-     * to keep the previous classes to "remember the state" 
+     * Refactored to use Observable
      */
-    prevCourses: string[] = [];
-    fetchedCourses: Promise<Class[]> = Promise.resolve([]);
+    courseNamesSubject: Subject<string[]>;
+    courseNamesObservable: Observable<string[]>;
+
     /**
      * should contain the optimized schedule.
      * will become the Input of ScheduleComponent 
@@ -46,14 +75,10 @@ export class AppComponent {
      */
     resetCourses(courses: string[]) {
         console.log(courses);
-        if (this.isChanged(this.prevCourses, courses)) { // the user changed sth
-            this.prevCourses = courses;
-            console.log("NEW STUFF!");
-            // will probably need to fetch class info from server
-            this.fetchedCourses = this.cis.getCoursesInfoByNameMock(courses);
-        } else {
-            console.log("NO NEW STUFF!");
-            // could keep using the old fetchedCourses
+        if (!this.dirty) {
+            this.courseNamesSubject.next([]);
+            this.dirty = true;
         }
+        this.courseNamesSubject.next(courses);
     }
 }
