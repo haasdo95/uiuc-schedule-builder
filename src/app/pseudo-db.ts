@@ -84,7 +84,7 @@ export const pseudo_db: Class[] = [
                 meetings: {
                     date: 'TR',
                     time: {
-                        from : '9:30 am',
+                        from : '09:30 am',
                         to: '10:45 am'
                     }
                 }
@@ -97,8 +97,8 @@ export const pseudo_db: Class[] = [
                 meetings: {
                     date: 'F',
                     time: {
-                        from : '2:00 pm',
-                        to: '2:50 pm'
+                        from : '02:00 pm',
+                        to: '02:50 pm'
                     }
                 }
             }, 

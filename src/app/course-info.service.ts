@@ -4,13 +4,9 @@ import { Trie } from './trie'
 
 import 'rxjs/add/operator/toPromise';
 
-import * as moment from 'moment';
 import { Class } from './class-section'
 
 import { pseudo_db, pseudo_course_list } from './pseudo-db'
-
-const currYear = 2017;
-const currTerm = 'fall';
 
 @Injectable()
 export class CourseInfoService {

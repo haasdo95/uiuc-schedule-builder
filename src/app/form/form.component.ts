@@ -9,11 +9,11 @@ import 'rxjs/add/operator/map';
   selector: 'app-form',
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.css'],
-  providers: [CourseInfoService]
+  providers: []
 })
 export class FormComponent implements OnInit, OnDestroy {
 
-    @Output() courses: EventEmitter<Class[]> = new EventEmitter();
+    @Output() courses: EventEmitter<string[]> = new EventEmitter();
 
     /**
      * The input array where users input their courses
@@ -60,9 +60,7 @@ export class FormComponent implements OnInit, OnDestroy {
      * @param courses 
      */
     emitCourses(courses: string[]) {
-        this.cis.getCoursesInfoByNameMock(courses).then(classes => {
-            this.courses.emit(classes);
-        })
+        this.courses.emit(courses);
     }
 
     subscriptions: Subscription[] = [];
