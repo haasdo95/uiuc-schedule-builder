@@ -14,7 +14,22 @@ import { Class } from './class-section'
 })
 export class AppComponent implements OnInit {
 
+    /**
+     * False if user has never submitted any course name
+     */
     private dirty: boolean = false;
+    
+    /**
+     * Refactored to use Observable
+     */
+    courseNamesSubject: Subject<string[]>;
+    courseNamesObservable: Observable<string[]>;
+
+    /**
+     * should contain the optimized schedule.
+     * will become the Input of ScheduleComponent 
+     */
+    schedule = [];
 
     constructor(private cis: CourseInfoService) {}
 
@@ -42,18 +57,6 @@ export class AppComponent implements OnInit {
     }
 
     /**
-     * Refactored to use Observable
-     */
-    courseNamesSubject: Subject<string[]>;
-    courseNamesObservable: Observable<string[]>;
-
-    /**
-     * should contain the optimized schedule.
-     * will become the Input of ScheduleComponent 
-     */
-    schedule = [];
-
-    /**
      * A trivial method to compare string[]
      * @param prev 
      * @param curr 
@@ -76,6 +79,7 @@ export class AppComponent implements OnInit {
     resetCourses(courses: string[]) {
         console.log(courses);
         if (!this.dirty) {
+            // A padding made necessary because of the way pairwise works
             this.courseNamesSubject.next([]);
             this.dirty = true;
         }

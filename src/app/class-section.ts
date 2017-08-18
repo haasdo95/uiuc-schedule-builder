@@ -20,6 +20,7 @@ export class Meeting {
         from: string;
         to: string
     }
+    // method used to decode the date data stored in string format
     getMeetings(): Range[] { // preproc
         let ranges: Range[] = [];
         for (const d of this.date) {

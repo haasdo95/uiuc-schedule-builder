@@ -63,51 +63,32 @@ export class FormComponent implements OnInit, OnDestroy {
         this.courses.emit(courses);
     }
 
+    /**
+     * Subscriptions used to listen on the input boxes
+     * Unsubscribed when the user makes changes to prevent mem leak
+     */
     subscriptions: Subscription[] = [];
+
+    /**
+     * The structure used to contain auto-completion hints
+     */
     hints: string[][] = [[], [], []];
 
-    reinitSubscriptions() {
+    /**
+     * Method to unsubscribe all.
+     */
+    private reinitSubscriptions() {
         for (const sub of this.subscriptions) {
             sub.unsubscribe();
         }
         this.subscriptions = [];
     }
 
-    showHints(prefix: string, idx: number) {
-        if (!prefix) {
-            this.hints[idx] = [];
-        } else {
-            this.hints[idx] = this.cis.getCourseListMock()
-                                .getWordsWithPrefix(prefix.toUpperCase());
-        }
-    }
-
-    hideHints(event, idx: number) {
-        if (!event) {
-            this.hints[idx] = [];
-            return;
-        }
-        const t = (event.relatedTarget as HTMLElement);
-        if (t && t.classList.contains('dontBlur')) {
-            return;
-        }
-        this.hints[idx] = [];
-    }
-
-    fillWithFirst(fc: FormControl, idx: number, event: Event) {
-        event.preventDefault();
-        event.stopPropagation();
-        if (!this.hints[idx] || !this.hints[idx].length) {
-            return;
-        }
-        fc.setValue(this.hints[idx][0]);
-    }
-
     /**
-     * A method to handle autocomplete
+     * A method to handle autocomplete by subcribing to all.
      * TODO: implement the whole thing
      */
-    handleAutocomplete() {
+    private handleAutocomplete() {
         for (let index = 0; index < this.classesFormArray.controls.length; ++index) {
             const fc = this.classesFormArray.controls[index] as FormControl;
             this.subscriptions.push(
@@ -119,6 +100,56 @@ export class FormComponent implements OnInit, OnDestroy {
                 )
             );
         }
+    }
+
+    /**
+     * Method used to fill the corresponding entry 
+     * in this.hints with the help of cis service
+     * @param prefix 
+     * @param idx 
+     */
+    showHints(prefix: string, idx: number) {
+        if (!prefix) {
+            this.hints[idx] = [];
+        } else {
+            this.hints[idx] = this.cis.getCourseListMock()
+                                .getWordsWithPrefix(prefix.toUpperCase());
+        }
+    }
+
+    /**
+     * Method used to hide hints by flushing 
+     * the corresponding entry in this.hints
+     * @param event 
+     * @param idx 
+     */
+    hideHints(event, idx: number) {
+        if (!event) {
+            this.hints[idx] = [];
+            return;
+        }
+        // edge case to prevent hitting hint button from flushing the hints
+        const t = (event.relatedTarget as HTMLElement);
+        if (t && t.classList.contains('dontBlur')) {
+            return;
+        }
+        this.hints[idx] = [];
+    }
+
+    /**
+     * Method used to handle keyDown.enter and keyDown.tab event
+     * by filling the input box with the first value in hints
+     * @param fc 
+     * @param idx 
+     * @param event 
+     */
+    fillWithFirst(fc: FormControl, idx: number, event: Event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (!this.hints[idx] || !this.hints[idx].length) {
+            return;
+        }
+        fc.setValue(this.hints[idx][0]);
     }
 
     constructor(private cis: CourseInfoService) { }

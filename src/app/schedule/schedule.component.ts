@@ -10,7 +10,7 @@ export class ScheduleComponent implements OnInit {
     @Input() events;
 
     options: any = {
-        columnFormat: 'dddd'
+        columnFormat: 'ddd'
     }
 
     constructor() { }
