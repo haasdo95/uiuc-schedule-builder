@@ -1,14 +1,14 @@
 <form [formGroup]="formModel" (ngSubmit)="generate()">
     <div class="row">
-        <div class="col-lg-6">
-            <button (click)="oneMoreLess(-1)" type="button" class="btn btn-danger 
+        <div class="col-xs-12 col-lg-6 my-1">
+            <button (click)="oneMoreLess(-1)" type="button" class="formHeading btn btn-danger 
                 waves-effect waves-light">One More Class!</button>
         </div>
-        <div class="col-lg-6">
-            <button (click)="generate()" type="button" class="btn btn-info 
+        <div class="col-xs-12 col-lg-6 my-1">
+            <button (click)="generate()" type="button" class="formHeading btn btn-info 
                 waves-effect waves-light">generate schedule!</button>
         </div>
-        <div class="col-sm-12">
+        <div class="col-sm-12 mt-3">
             <ul class="mt-3" formArrayName="classes">
                 <li class="mb-4" *ngFor="let c of formModel.controls['classes'].controls; let i=index"> 
                     <div class="md-form input-group">
