@@ -4,13 +4,14 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/pairwise';
 
-import { Class } from './class-section'
+import { Class, Section, Meeting, Range } from './class-section'
+import { SchedulingToolkitService } from './scheduling-toolkit.service'
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [ CourseInfoService ]
+  providers: [ CourseInfoService, SchedulingToolkitService ]
 })
 export class AppComponent implements OnInit {
 
@@ -31,7 +32,10 @@ export class AppComponent implements OnInit {
      */
     schedule = [];
 
-    constructor(private cis: CourseInfoService) {}
+    constructor(
+        private cis: CourseInfoService,
+        private stk: SchedulingToolkitService
+    ) {}
 
     ngOnInit() {
         this.courseNamesSubject = new Subject();

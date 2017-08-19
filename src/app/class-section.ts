@@ -20,8 +20,17 @@ export class Meeting {
         from: string;
         to: string
     }
+
+    ranges: Range[];
+
+    constructor(args) {
+        this.date = args.date;
+        this.time = args.time;
+        this.ranges = this.getMeetings();
+    }
+
     // method used to decode the date data stored in string format
-    getMeetings(): Range[] { // preproc
+    private getMeetings(): Range[] { // preproc
         let ranges: Range[] = [];
         for (const d of this.date) {
             const day = weekMap[d];
