@@ -31,13 +31,23 @@ export class FormComponent implements OnInit, OnDestroy {
     /**
      * A trivial method to remove or add input boxes
      */
-    oneMoreLess(val: number) {
+    oneMoreLess(idx: number) {
         this.reinitSubscriptions();
-        if (val == -1) {
+        if (idx == -1) {
             this.classesFormArray.push(new FormControl());
         } else {
-            this.classesFormArray.removeAt(val);
+            this.classesFormArray.removeAt(idx);
         }
+        this.handleAutocomplete();
+    }
+
+    /**
+     * A method to insert an input box
+     * @param idx 
+     */
+    insertCourse(idx: number) {
+        this.reinitSubscriptions();
+        this.classesFormArray.insert(idx+1, new FormControl());
         this.handleAutocomplete();
     }
 
@@ -52,14 +62,6 @@ export class FormComponent implements OnInit, OnDestroy {
                 courses.push(ctrl.value);
             }
         }
-        this.emitCourses(courses);
-    }
-
-    /**
-     * The method used to emit courses to AppComponent
-     * @param courses 
-     */
-    emitCourses(courses: string[]) {
         this.courses.emit(courses);
     }
 

@@ -1,4 +1,4 @@
-<form [formGroup]="formModel" (ngSubmit)="generate()">
+<form [formGroup]="formModel">
     <div class="row">
         <div class="col-xs-12 col-lg-6 my-1">
             <button (click)="oneMoreLess(-1)" type="button" class="formHeading btn btn-danger 
@@ -16,6 +16,12 @@
                         <input (keydown.tab)="fillWithFirst(c, i, $event)" (keydown.enter)="fillWithFirst(c, i, $event)"
                             (focus)="showHints(c.value, i)" (blur)="hideHints($event, i)" type="text" id="_{{i}}"
                             name="_{{i}}" class="form-control d-inline" [formControlName]="i">
+                        <div class="input-group-btn">
+                            <button (click)="insertCourse(i)"
+                                class="deleteButton btn btn-success my-0 waves-effect waves-light">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
                         <div class="input-group-btn">
                             <button (click)="oneMoreLess(i)"
                                 class="deleteButton btn btn-danger my-0 waves-effect waves-light">
