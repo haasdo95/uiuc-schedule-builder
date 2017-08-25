@@ -82,10 +82,12 @@ export class AppComponent implements OnInit {
     }
 
     tryout() {
+
         this.cis.getCoursesInfoByNameMock(['CS 173']).then(c => {
             const cls = c[0];
-            console.log(this.stk.groupClassSectionBySectionAB(cls));
-            console.log(this.stk.groupClassSectionBySectionType(this.stk.groupClassSectionBySectionAB(cls)[0]));
+            // console.log(this.stk.groupClassSectionByBigSection(cls));
+            // console.log(this.stk.groupClassSectionBySectionType(this.stk.groupClassSectionByBigSection(cls)[0]));
+            
         })
     }
 

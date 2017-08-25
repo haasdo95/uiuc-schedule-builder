@@ -101,7 +101,19 @@ export const pseudo_db: Class[] = [
                         to: '02:50 pm'
                     }
                 })
-            }, 
+            },
+            {
+                section: 'ADB',
+                crn: '51496',
+                type: 'DIS',
+                meetings: new Meeting({
+                    date: 'R',
+                    time: {
+                        from : '03:00 pm',
+                        to: '03:50 pm'
+                    }
+                })
+            },
             // section
             {
                 section: 'BL2',

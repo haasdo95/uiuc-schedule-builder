@@ -62,7 +62,7 @@ export class SchedulingToolkitService {
      * 
      * @param course 
      */
-    groupClassSectionBySectionAB(course: Class): Section[][] {
+    groupClassSectionByBigSection(course: Class): Section[][] {
         const sections =  _.groupBy(course.sections, sec => sec.section[0]);
         return _.values(sections);
     }
@@ -74,6 +74,133 @@ export class SchedulingToolkitService {
     groupClassSectionBySectionType(sections: Section[]): Section[][] {
         const sectionGroups = _.groupBy(sections, sec => sec.type);
         return _.values(sectionGroups);
+    }
+
+    /**
+     * returns a generator that could keep generating
+     * all possibilities within a "big section"
+     * e.g. returns many (LEC, LBD) tuples
+     * @param section
+     */
+    createBigSectionGenerator(bigSectionAlreadyTyped: Section[][]): IterableIterator<Section[]> {
+        const gen = function* () {
+            function* doCartesian(i, prod) {
+                if (i == bigSectionAlreadyTyped.length) {
+                    yield prod;
+                } else {
+                    for (let j = 0; j < bigSectionAlreadyTyped[i].length; j++) {
+                        yield* doCartesian(i + 1, prod.concat([bigSectionAlreadyTyped[i][j]]));
+                    }
+                }
+            }
+            yield* doCartesian(0, []);
+        }
+        return gen();
+    }
+
+    /**
+     * Filter out sections that has overlap with already chosen sections
+     * @param bigSectionAlreadyTyped 
+     * @param sectionsChosen 
+     */
+    private pruneBigSection(bigSectionAlreadyTyped: Section[][], sectionsChosen: Section[]): Section[][] {
+        return bigSectionAlreadyTyped.map(
+            bsat => bsat.filter(
+                sec => !sectionsChosen.some(
+                    csec => this.sectionOverlap(sec, csec)
+                )
+            )
+        )
+    }
+
+    /**
+     * the true business of the WHOLE project
+     * @param courses 
+     */
+    createStateMachine(courses: Class[]) {
+
+        const scheduleCourses = function * (
+            bigSectionsAlreadyTyped: Section[][][],
+            index: number,
+            chosenSections: Section[],
+            pruneBigSection: (bsat: Section[][], csec: Section[]) => Section[][],
+            createBigSectionGenerator: (bsat: Section[][]) => IterableIterator<Section[]>
+        )
+        {
+            // base case
+            if (index == bigSectionsAlreadyTyped.length) { // you made it!
+                yield chosenSections;
+            } else {
+                // get big section for current course
+                let bigSectionAlreadyTyped = bigSectionsAlreadyTyped[index];
+                const pruned = pruneBigSection(bigSectionAlreadyTyped, chosenSections);
+                /**
+                 * Commented out since Cartesian product can handle this case
+                 */
+                // if (pruned.some(
+                //     p => p.length == 0
+                // )) // if all "LEC" are pruned! -> a failure
+                // {
+                //     return;
+                // }
+                const iter = createBigSectionGenerator(pruned);
+                for (let courseCombination of iter) {
+                    yield * scheduleCourses(
+                        bigSectionsAlreadyTyped,
+                        index + 1,
+                        chosenSections.concat(courseCombination),
+                        pruneBigSection,
+                        createBigSectionGenerator
+                    )
+                }
+            }
+        }
+
+        const bigSectionIndices = new Array(courses.length).fill(0);
+
+        const bigSectionsOfCourses: Section[][][] = [];
+        for (const course of courses) {
+            // TODO: Take care of exceptions like PHYS!!!
+            bigSectionsOfCourses.push(this.groupClassSectionByBigSection(course));
+        }
+
+        const bigSectionLengths = new Array(courses.length);
+        for (let i = 0; i < courses.length; ++i) {
+            bigSectionLengths[i] = bigSectionsOfCourses[i].length;
+        }
+
+        var gen = function * () {
+            while (true) {
+                // try to schedule classes given current big section combination
+                const chosenBigSectionsAlreadyTyped: Section[][][] = bigSectionsOfCourses.map(
+                    (bsoc, index) => this.groupClassSectionBySectionType(bsoc[bigSectionIndices[index]])
+                )
+
+                yield * scheduleCourses(
+                    chosenBigSectionsAlreadyTyped,
+                    0,
+                    [],
+                    this.pruneBigSection,
+                    this.createBigSectionGenerator
+                )
+
+                // get exhaustive on big section combinations
+                ++bigSectionIndices[courses.length-1];
+                for (let j = courses.length; 
+                    --j >= 0 && bigSectionIndices[j] == bigSectionLengths[j]; ) 
+                {
+                    if (j == 0) {
+                        // done searching for all big section combinations
+                        return;
+                    }
+                    bigSectionIndices[j] = 0;
+                    ++bigSectionIndices[j-1]; // carry
+                }
+            }
+        }
+        gen = gen.bind({this: this});
+        const retVal = gen();
+        return retVal;
     }
 
 }
