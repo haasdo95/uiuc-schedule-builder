@@ -15,11 +15,11 @@ class json_dumper(infoExtractor):
             detail = i.find_all('detailedSection')
             sections = []
             for j in detail:
-                section = j.find('sectionNumber').get_text().strip()
-                crn = j['id']
-                type = j.find('type')['code']
-                m = j.find('meeting')
                 try:
+                    section = j.find('sectionNumber').get_text().strip()
+                    crn = j['id']
+                    type = j.find('type')['code']
+                    m = j.find('meeting')
                     meeting = {'date':m.daysOfTheWeek.get_text().strip(),'time':{'from':m.start.get_text().strip(),'to':m.end.get_text().strip()}}
                     sections.append({'section':section,'crn':crn,'type':type,'meetings':meeting})
                 except AttributeError:

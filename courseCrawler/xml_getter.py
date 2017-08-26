@@ -8,7 +8,7 @@ import aiohttp
 class xml_gettter:
     def __init__(self):
         self.task = []
-        self.sem = asyncio.Semaphore(10)
+        self.sem = asyncio.Semaphore(20)
 
     async def wrapper(self, addr):
         s = aiohttp.ClientSession()
