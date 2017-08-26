@@ -100,7 +100,7 @@ export class SchedulingToolkitService {
      * @param bigSectionAlreadyTyped 
      * @param sectionsChosen 
      */
-    private pruneBigSection(bigSectionAlreadyTyped: Section[][], sectionsChosen: Section[]): Section[][] {
+    pruneBigSection(bigSectionAlreadyTyped: Section[][], sectionsChosen: Section[]): Section[][] {
         return bigSectionAlreadyTyped.map(
             bsat => bsat.filter(
                 sec => !sectionsChosen.some(
@@ -111,17 +111,14 @@ export class SchedulingToolkitService {
     }
 
     /**
-     * the true business of the WHOLE project
-     * @param courses 
+     * the helper method for creating state machine.
+     * should schedule sections given big sections(bsat) of each courses
      */
-    createStateMachine(courses: Class[]) {
-
-        const scheduleCourses = function * (
+    scheduleCourses: (bsat: Section[][][], index: number, chosenSections: Section[]) => IterableIterator<Section[]> =
+        (function * (
             bigSectionsAlreadyTyped: Section[][][],
             index: number,
-            chosenSections: Section[],
-            pruneBigSection: (bsat: Section[][], csec: Section[]) => Section[][],
-            createBigSectionGenerator: (bsat: Section[][]) => IterableIterator<Section[]>
+            chosenSections: Section[]
         )
         {
             // base case
@@ -130,7 +127,7 @@ export class SchedulingToolkitService {
             } else {
                 // TODO: The logic for suboptimal scheduling comes here
                 let bigSectionAlreadyTyped = bigSectionsAlreadyTyped[index];
-                const pruned = pruneBigSection(bigSectionAlreadyTyped, chosenSections);
+                const pruned = this.pruneBigSection(bigSectionAlreadyTyped, chosenSections);
                 /**
                  * Commented out since Cartesian product can handle this case
                  */
@@ -140,18 +137,22 @@ export class SchedulingToolkitService {
                 // {
                 //     return;
                 // }
-                const iter = createBigSectionGenerator(pruned);
+                const iter = this.createBigSectionGenerator(pruned);
                 for (let courseCombination of iter) {
-                    yield * scheduleCourses(
+                    yield * this.scheduleCourses(
                         bigSectionsAlreadyTyped,
                         index + 1,
                         chosenSections.concat(courseCombination),
-                        pruneBigSection,
-                        createBigSectionGenerator
                     )
                 }
             }
-        }
+        }).bind({this: this})
+
+    /**
+     * the true business of the WHOLE project
+     * @param courses 
+     */
+    createStateMachine(courses: Class[]) {
 
         const bigSectionIndices = new Array(courses.length).fill(0);
 
@@ -173,12 +174,10 @@ export class SchedulingToolkitService {
                     (bsoc, index) => this.groupClassSectionBySectionType(bsoc[bigSectionIndices[index]])
                 )
 
-                yield * scheduleCourses(
+                yield * this.scheduleCourses(
                     chosenBigSectionsAlreadyTyped,
                     0,
-                    [],
-                    this.pruneBigSection,
-                    this.createBigSectionGenerator
+                    []
                 )
 
                 // get exhaustive on big section combinations

@@ -142,4 +142,36 @@ export const pseudo_db: Class[] = [
             },
         ]
     } as Class, 
+    // course
+    {
+        name: 'CS 421',
+        sections: [
+            // section
+            {
+                section: 'A3',
+                crn: '65906',
+                type: 'LCD',
+                meetings: new Meeting({
+                    date: 'TR',
+                    time: {
+                        from : '11:00 AM',
+                        to: '12:15 PM'
+                    }
+                })
+            }, 
+            // section
+            {
+                section: 'D3',
+                crn: '30128',
+                type: 'LCD',
+                meetings: new Meeting({
+                    date: 'TR',
+                    time: {
+                        from : '12:30 PM',
+                        to: '01:45 PM'
+                    }
+                })
+            }
+        ]
+    } as Class, 
 ]

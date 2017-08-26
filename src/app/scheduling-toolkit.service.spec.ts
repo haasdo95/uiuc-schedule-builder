@@ -123,6 +123,7 @@ fdescribe('range overlap should work', () => {
   }));
 });
 
+
 import { pseudo_db } from './pseudo-db'
 
 const cs125Secs = pseudo_db[0].sections;
@@ -153,4 +154,65 @@ fdescribe('meeting/section overlap should work', () => {
         ).toBeTruthy();
     }));
 
+});
+
+
+fdescribe('create big section generator should work', () => {
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [SchedulingToolkitService]
+        });
+    });
+  
+    it('should be created', inject([SchedulingToolkitService], (service: SchedulingToolkitService) => {
+        expect(service).toBeTruthy();
+    }));
+
+    it('create big section generator should work 1', inject([SchedulingToolkitService], (service: SchedulingToolkitService) => {
+        const cs173SecA = service.groupClassSectionByBigSection(pseudo_db[2])[0];
+        const cs173SecATyped = service.groupClassSectionBySectionType(cs173SecA);
+        expect(Array.from(service.createBigSectionGenerator(cs173SecATyped)).length)
+            .toBe(2);
+    }));
+
+    it('create big section generator should work 2', inject([SchedulingToolkitService], (service: SchedulingToolkitService) => {
+        const cs173SecB = service.groupClassSectionByBigSection(pseudo_db[2])[1];
+        const cs173SecBTyped = service.groupClassSectionBySectionType(cs173SecB);
+        expect(Array.from(service.createBigSectionGenerator(cs173SecBTyped)).length)
+            .toBe(1);
+    }));
+
+    it('create big section generator should work 3', inject([SchedulingToolkitService], (service: SchedulingToolkitService) => {
+        const cs173SecA = service.groupClassSectionByBigSection(pseudo_db[2])[0];
+        const cs173SecATyped = service.groupClassSectionBySectionType(cs173SecA);
+        cs173SecATyped[0] = []; // prune all LEC sections
+        expect(Array.from(service.createBigSectionGenerator(cs173SecATyped)).length)
+            .toBe(0);
+    }));
+
+});
+
+
+fdescribe('prune big section should work', () => {
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [SchedulingToolkitService]
+        });
+    });
+
+    it('prune big section should work 1', inject([SchedulingToolkitService], (service: SchedulingToolkitService) => {
+        const cs173SecA = service.groupClassSectionByBigSection(pseudo_db[2])[0];
+        const cs173SecATyped = service.groupClassSectionBySectionType(cs173SecA);
+        const pruned = service.pruneBigSection(cs173SecATyped, [cs125aya]);
+        expect(Array.from(service.createBigSectionGenerator(pruned)).length)
+            .toBe(0)
+    }));
+
+    it('prune big section should work 2', inject([SchedulingToolkitService], (service: SchedulingToolkitService) => {
+        const cs173SecA = service.groupClassSectionByBigSection(pseudo_db[2])[0];
+        const cs173SecATyped = service.groupClassSectionBySectionType(cs173SecA);
+        const pruned = service.pruneBigSection(cs173SecATyped, [cs125al1]);
+        expect(Array.from(service.createBigSectionGenerator(pruned)).length)
+            .toBe(2)
+    }));
 });
