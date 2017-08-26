@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Class, Section, Meeting, Range } from './class-section'
 import * as _ from "lodash";
+import * as moment from 'moment';
+import { Moment } from 'moment'
 
 @Injectable()
 export class SchedulingToolkitService {
@@ -17,23 +19,18 @@ export class SchedulingToolkitService {
     }
 
     /**
-     * the meeting of a section consist of many ranges
-     * e.g. MW 2:00-3:00 => ['M 2:00-3:00', 'W 2:00-3:00']
-     * check all the ranges in two Meetings to detect overlap
+     * Refactered to be more efficient
      * @param m1 
      * @param m2 
      */
     meetingOverlap(m1: Meeting, m2: Meeting) {
-        const ranges_1 = m1.ranges;
-        const ranges_2 = m2.ranges;
-        for (const r1 of ranges_1) {
-            for (const r2 of ranges_2) {
-                if (this.rangeOverlap(r1, r2)) {
-                    return true;
-                }
-            }
+        const dateIntersect = _.intersection(m1.date.split(''), m2.date.split(''));
+        if (dateIntersect.length == 0) {
+            return false;
         }
-        return false;
+        else {
+            return this.rangeOverlap(m1.range, m2.range);
+        }
     }
 
     /**

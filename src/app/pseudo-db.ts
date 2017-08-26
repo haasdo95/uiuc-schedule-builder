@@ -20,8 +20,8 @@ export const pseudo_db: Class[] = [
                 meetings: new Meeting({
                     date: 'MWF',
                     time: {
-                        from : '08:00 am',
-                        to: '08:50 am'
+                        from : '08:00 AM',
+                        to: '08:50 AM'
                     }
                 })
             }, 
@@ -33,8 +33,8 @@ export const pseudo_db: Class[] = [
                 meetings: new Meeting({
                     date: 'T',
                     time: {
-                        from : '09:00 am',
-                        to: '10:50 am'
+                        from : '09:00 AM',
+                        to: '10:50 AM'
                     }
                 })
             },
@@ -52,8 +52,8 @@ export const pseudo_db: Class[] = [
                 meetings: new Meeting({
                     date: 'MWF',
                     time: {
-                        from : '11:00 am',
-                        to: '11:50 am'
+                        from : '11:00 AM',
+                        to: '11:50 AM'
                     }
                 })
             }, 
@@ -65,8 +65,8 @@ export const pseudo_db: Class[] = [
                 meetings: new Meeting({
                     date: 'R',
                     time: {
-                        from : '01:00 pm',
-                        to: '02:50 pm'
+                        from : '01:00 PM',
+                        to: '02:50 PM'
                     }
                 })
             },
@@ -84,8 +84,8 @@ export const pseudo_db: Class[] = [
                 meetings: new Meeting({
                     date: 'TR',
                     time: {
-                        from : '09:30 am',
-                        to: '10:45 am'
+                        from : '09:30 AM',
+                        to: '10:45 AM'
                     }
                 })
             }, 
@@ -97,8 +97,8 @@ export const pseudo_db: Class[] = [
                 meetings: new Meeting({
                     date: 'F',
                     time: {
-                        from : '02:00 pm',
-                        to: '02:50 pm'
+                        from : '02:00 PM',
+                        to: '02:50 PM'
                     }
                 })
             },
@@ -109,8 +109,8 @@ export const pseudo_db: Class[] = [
                 meetings: new Meeting({
                     date: 'R',
                     time: {
-                        from : '03:00 pm',
-                        to: '03:50 pm'
+                        from : '03:00 PM',
+                        to: '03:50 PM'
                     }
                 })
             },
@@ -122,8 +122,8 @@ export const pseudo_db: Class[] = [
                 meetings: new Meeting({
                     date: 'TR',
                     time: {
-                        from : '11:00 am',
-                        to: '12:15 pm'
+                        from : '11:00 AM',
+                        to: '12:15 PM'
                     }
                 })
             }, 
@@ -135,8 +135,8 @@ export const pseudo_db: Class[] = [
                 meetings: new Meeting({
                     date: 'F',
                     time: {
-                        from : '04:00 pm',
-                        to: '04:50 pm'
+                        from : '04:00 PM',
+                        to: '04:50 PM'
                     }
                 })
             },
