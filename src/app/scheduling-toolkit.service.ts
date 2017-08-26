@@ -131,7 +131,7 @@ export class SchedulingToolkitService {
             if (index == bigSectionsAlreadyTyped.length) { // you made it!
                 yield chosenSections;
             } else {
-                // get big section for current course
+                // TODO: The logic for suboptimal scheduling comes here
                 let bigSectionAlreadyTyped = bigSectionsAlreadyTyped[index];
                 const pruned = pruneBigSection(bigSectionAlreadyTyped, chosenSections);
                 /**
