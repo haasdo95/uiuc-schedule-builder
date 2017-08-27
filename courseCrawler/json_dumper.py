@@ -10,7 +10,7 @@ class json_dumper(infoExtractor):
     def __init__(self, text):
         super(json_dumper, self).__init__(text)
         client = MongoClient('localhost', 27017)
-        self.db = client['coursesData']
+        self.db = client['scheduler']
 
     def dump(self, fileName, insertDB):
         classList = []

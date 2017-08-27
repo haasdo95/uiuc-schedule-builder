@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Section } from '../class-section'
 
 @Component({
   selector: 'app-schedule',
@@ -7,7 +8,9 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ScheduleComponent implements OnInit {
 
-    @Input() events;
+    @Input() sections: Section[];
+
+    events = [];
 
     options: any = {
         columnFormat: 'ddd'

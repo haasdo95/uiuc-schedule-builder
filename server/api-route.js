@@ -15,10 +15,10 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 // import db references
 var courseSchema = require('./schemas/course-schema');
-var Course = db.model('courseModel', courseSchema);
+var Course = db.model('courseModel', courseSchema, 'courses');
 
 // routes
-router.get('/courses', function (req, res) {
+router.post('/courses', function (req, res) {
     if (!req.body.courseNames) {
         return res.json({courses: []})
     }
@@ -30,7 +30,6 @@ router.get('/courses', function (req, res) {
         if (err) {
             return res.json({courses: []});
         }
-        console.log("RESULT: ", result);
         return res.json({courses: result});
     })
 })

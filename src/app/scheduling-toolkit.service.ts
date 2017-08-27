@@ -129,15 +129,6 @@ export class SchedulingToolkitService {
                 // TODO: The logic for suboptimal scheduling comes here
                 let bigSectionAlreadyTyped = bigSectionsAlreadyTyped[index];
                 const pruned = this.pruneBigSection(bigSectionAlreadyTyped, chosenSections);
-                /**
-                 * Commented out since Cartesian product can handle this case
-                 */
-                // if (pruned.some(
-                //     p => p.length == 0
-                // )) // if all "LEC" are pruned! -> a failure
-                // {
-                //     return;
-                // }
                 const iter = this.createBigSectionGenerator(pruned);
                 for (let courseCombination of iter) {
                     yield * this.scheduleCourses(

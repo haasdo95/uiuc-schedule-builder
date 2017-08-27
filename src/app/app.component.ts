@@ -59,14 +59,14 @@ export class AppComponent implements OnInit {
      * should contain the optimized schedule.
      * will become the Input of ScheduleComponent 
      */
-    schedule = [];
+    sections: Section[] = null;
 
     constructor(
         private cis: CourseInfoService,
         private stk: SchedulingToolkitService
     ) {}
 
-    stateMachine: IterableIterator<Section[]> = this.stk.createStateMachine([]);
+    private stateMachine: IterableIterator<Section[]> = this.stk.createStateMachine([]);
 
     ngOnInit() {
         this.courseNamesSubject = new Subject();
@@ -76,7 +76,18 @@ export class AppComponent implements OnInit {
                 .partition(twoCourses => this.isChanged(twoCourses[0], twoCourses[1]));
         const changed = obs[0];
         const unchanged = obs[1];
-        changed.map(twoCourses => twoCourses[1])
+        changed.map(twoCourses => twoCourses[1]) // focus on the new courses
+               .switchMap(courses =>
+                    this.cis.getCoursesInfoByName(courses)
+               )
+               .subscribe(fetchedCourses => {
+                   this.stateMachine = this.stk.createStateMachine(fetchedCourses);
+                   this.sections = this.stateMachine.next().value;
+               })
+        unchanged.map(twoCourses => twoCourses[1])
+                 .subscribe(courses => {
+                     this.sections = this.stateMachine.next().value;
+                 })
     }
 
     resetStateMachine() {
@@ -108,7 +119,6 @@ export class AppComponent implements OnInit {
      * @param courses
      */
     resetCourses(courses: string[]) {
-        console.log(courses);
         if (!this.dirty) {
             // A padding made necessary because of the way pairwise works
             this.courseNamesSubject.next([]);
