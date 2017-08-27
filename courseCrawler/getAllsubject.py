@@ -28,13 +28,14 @@ courses_list = all_courses.findAllCourses()
 #     for i in courses_list:
 #         print(i, file=f)
 
-detail_courses = list(map(lambda x:x+'?mode=detail',courses_list))
+detail_courses = list(map(lambda x: x + '?mode=detail', courses_list))
 detailGetter = xml_gettter()
 for i in detail_courses:
     detailGetter.addGetContentCoroutine(i)
 a = detailGetter.run_getter()
 all_detail = json_dumper(a)
 # all_detail.cahce_xml()
-all_detail.dump('allCourses.json')
+
+all_detail.dump('allCourses.json', True)
 
 print('Time used: ', time.time() - start)
