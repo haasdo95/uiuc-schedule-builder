@@ -29,7 +29,7 @@ export class Meeting {
         this.range = this.getMeetingTime();
     }
 
-    // method used to decode the date data stored in string format
+    // method used to decode the date string (10:00 AM) stored in string format
     private getMeetingTime(): Range { // preproc
         return {
             from: moment(this.time.from, 'hh:mm A'),

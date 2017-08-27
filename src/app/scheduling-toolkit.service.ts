@@ -19,7 +19,7 @@ export class SchedulingToolkitService {
     }
 
     /**
-     * Refactered to be more efficient
+     * Refactered to be more efficient.
      * @param m1 
      * @param m2 
      */
@@ -74,6 +74,7 @@ export class SchedulingToolkitService {
     }
 
     /**
+     * given an already "type-grouped" set of big sections,
      * returns a generator that could keep generating
      * all possibilities within a "big section"
      * e.g. returns many (LEC, LBD) tuples
@@ -152,7 +153,7 @@ export class SchedulingToolkitService {
      * the true business of the WHOLE project
      * @param courses 
      */
-    createStateMachine(courses: Class[]) {
+    createStateMachine(courses: Class[]): IterableIterator<Section[]> {
 
         const bigSectionIndices = new Array(courses.length).fill(0);
 

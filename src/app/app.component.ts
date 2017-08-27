@@ -50,8 +50,8 @@ export class AppComponent implements OnInit {
     /**
      * Refactored to use Observable
      */
-    courseNamesSubject: Subject<string[]>;
-    courseNamesObservable: Observable<string[]>;
+    private courseNamesSubject: Subject<string[]>;
+    private courseNamesObservable: Observable<string[]>;
 
     /**
      * should contain the optimized schedule.
@@ -69,8 +69,6 @@ export class AppComponent implements OnInit {
         // Necessary because of the way pairwise works
         this.courseNamesObservable = this.courseNamesSubject.asObservable();
 
-        this.tryout();
-
         this.courseNamesObservable.pairwise()
                 .subscribe(twoCourses => {
                     if (this.isChanged(twoCourses[0], twoCourses[1])) {
@@ -79,16 +77,6 @@ export class AppComponent implements OnInit {
                         this.goOnWithCurrFSM();
                     }
                 })
-    }
-
-    tryout() {
-
-        this.cis.getCoursesInfoByNameMock(['CS 173']).then(c => {
-            const cls = c[0];
-            // console.log(this.stk.groupClassSectionByBigSection(cls));
-            // console.log(this.stk.groupClassSectionBySectionType(this.stk.groupClassSectionByBigSection(cls)[0]));
-            
-        })
     }
 
     resetStateMachine() {
