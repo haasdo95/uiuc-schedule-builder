@@ -147,7 +147,7 @@ export class SchedulingToolkitService {
                     )
                 }
             }
-        }).bind({this: this})
+        }).bind(this)
 
     /**
      * the true business of the WHOLE project
@@ -195,7 +195,7 @@ export class SchedulingToolkitService {
                 }
             }
         }
-        gen = gen.bind({this: this});
+        gen = gen.bind(this);
         const retVal = gen();
         return retVal;
     }

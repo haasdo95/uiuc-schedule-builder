@@ -64,9 +64,10 @@ export class AppComponent implements OnInit {
         private stk: SchedulingToolkitService
     ) {}
 
+    stateMachine: IterableIterator<Section[]> = this.stk.createStateMachine([]);
+
     ngOnInit() {
         this.courseNamesSubject = new Subject();
-        // Necessary because of the way pairwise works
         this.courseNamesObservable = this.courseNamesSubject.asObservable();
 
         this.courseNamesObservable.pairwise()
