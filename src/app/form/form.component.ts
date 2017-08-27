@@ -114,7 +114,7 @@ export class FormComponent implements OnInit, OnDestroy {
         if (!prefix) {
             this.hints[idx] = [];
         } else {
-            this.hints[idx] = this.cis.getCourseListMock()
+            this.hints[idx] = this.cis.getCourseList()
                                 .getWordsWithPrefix(prefix.toUpperCase());
         }
     }

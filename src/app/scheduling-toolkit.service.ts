@@ -98,8 +98,8 @@ export class SchedulingToolkitService {
 
     /**
      * Filter out sections that has overlap with already chosen sections
-     * @param bigSectionAlreadyTyped 
-     * @param sectionsChosen 
+     * @param bigSectionAlreadyTyped
+     * @param sectionsChosen
      */
     pruneBigSection(bigSectionAlreadyTyped: Section[][], sectionsChosen: Section[]): Section[][] {
         return bigSectionAlreadyTyped.map(
@@ -151,7 +151,7 @@ export class SchedulingToolkitService {
 
     /**
      * the true business of the WHOLE project
-     * @param courses 
+     * @param courses
      */
     createStateMachine(courses: Class[]): IterableIterator<Section[]> {
 

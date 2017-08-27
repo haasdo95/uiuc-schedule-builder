@@ -4,7 +4,7 @@ export class Trie {
 
     /**
      * Trie-ify
-     * @param words 
+     * @param words
      */
     constructor(words: string[]) {
         for (const word of words) {

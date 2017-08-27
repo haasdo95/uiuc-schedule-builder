@@ -3,12 +3,14 @@ import { CourseInfoService } from './course-info.service'
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/pairwise';
+import 'rxjs/add/operator/partition';
+import 'rxjs/add/operator/switchMap';
 
 import { Class, Section, Meeting, Range } from './class-section'
 import { SchedulingToolkitService } from './scheduling-toolkit.service'
 
 /**
- * IMPORTANT: To avoid further confusion, we call sections 
+ * IMPORTANT: To avoid further confusion, we call sections
  * like the A, B section of CS 173 "big sections"
  * 
  * And the sections of a class, like its lab, lecture, discussion, "sections"
@@ -70,14 +72,11 @@ export class AppComponent implements OnInit {
         this.courseNamesSubject = new Subject();
         this.courseNamesObservable = this.courseNamesSubject.asObservable();
 
-        this.courseNamesObservable.pairwise()
-                .subscribe(twoCourses => {
-                    if (this.isChanged(twoCourses[0], twoCourses[1])) {
-                        this.resetStateMachine();
-                    } else {
-                        this.goOnWithCurrFSM();
-                    }
-                })
+        const obs = this.courseNamesObservable.pairwise()
+                .partition(twoCourses => this.isChanged(twoCourses[0], twoCourses[1]));
+        const changed = obs[0];
+        const unchanged = obs[1];
+        changed.map(twoCourses => twoCourses[1])
     }
 
     resetStateMachine() {
