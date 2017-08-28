@@ -2,15 +2,22 @@ import asyncio
 
 import aiohttp
 
-'''this class is for getting all the course info for one course(including all sections info, instructor...etc)'''
 
+class XmlGetter:
+    """
+    This is the module to get response from multiple URLs.
+    """
 
-class xml_gettter:
     def __init__(self):
         self.task = []
         self.sem = asyncio.Semaphore(20)
 
     async def wrapper(self, addr):
+        """
+
+        :param addr: the URL to target website
+        :return: the source code of that website
+        """
         s = aiohttp.ClientSession()
         async with self.sem:
             async with s.get(addr) as response:
@@ -18,12 +25,20 @@ class xml_gettter:
                 s.close()
                 return t
 
-    def addGetContentCoroutine(self, addr):
+    def add_get_content_coroutine(self, addr):
+        """
+
+        :param addr: add a task to finish in the event loop
+        """
         self.task.append(asyncio.ensure_future(self.wrapper(addr)))
 
     def run_getter(self):
+        """
+
+        :return: a list of result of tasks
+        """
         loop = asyncio.get_event_loop()
-        results = loop.run_until_complete(asyncio.gather(*(self.task)))
+        results = loop.run_until_complete(asyncio.gather(*self.task))
         return results
 
 # =================================time test====================================

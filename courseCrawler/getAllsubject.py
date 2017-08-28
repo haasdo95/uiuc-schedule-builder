@@ -1,41 +1,40 @@
 import time
 
 from addrBuilder import addrBuilder
-from infoExtractor import infoExtractor
-from json_dumper import json_dumper
-from xml_getter import xml_gettter
+from InfoExtractor import InfoExtractor
+from jsondumper import JsonDumper
+from xmlgetter import XmlGetter
 
-start = time.time()
-builder = addrBuilder('2018', 'spring')
-# print(builder.build())
 
-subjectGetter = xml_gettter()
-subjectGetter.addGetContentCoroutine(builder.build())
-a = subjectGetter.run_getter()
-# print(a)
-all_addr = infoExtractor(a)
-addr_list = all_addr.findAllSub()
-# with open('allSubjects.txt', mode='w') as f:
-#     for i in addr_list:
-#         print(i, file=f)
-courseGetter = xml_gettter()
-for i in addr_list:
-    courseGetter.addGetContentCoroutine(i)
-a = courseGetter.run_getter()
-all_courses = infoExtractor(a)
-courses_list = all_courses.findAllCourses()
-# with open('allCourses.txt', mode='w') as f:
-#     for i in courses_list:
-#         print(i, file=f)
+def get_all_subject(insertDB):
+    """
 
-detail_courses = list(map(lambda x: x + '?mode=detail', courses_list))
-detailGetter = xml_gettter()
-for i in detail_courses:
-    detailGetter.addGetContentCoroutine(i)
-a = detailGetter.run_getter()
-all_detail = json_dumper(a)
-# all_detail.cahce_xml()
+    :param insertDB: if True, then all of the data will be inserted into mongoDB
+    """
+    start = time.time()
+    builder = addrBuilder('2018', 'spring')
+    subjectGetter = XmlGetter()
+    subjectGetter.add_get_content_coroutine(builder.build())
+    print('Please wait, getting all subjects...')
+    a = subjectGetter.run_getter()
+    all_addr = InfoExtractor(a)
+    addr_list = all_addr.find_all_sub()
+    courseGetter = XmlGetter()
+    for i in addr_list:
+        courseGetter.add_get_content_coroutine(i)
+    print('Please wait, getting all courses...')
+    a = courseGetter.run_getter()
+    all_courses = InfoExtractor(a)
+    courses_list = all_courses.find_all_courses()
 
-all_detail.dump('allCourses.json', True)
+    detail_courses = list(map(lambda x: x + '?mode=detail', courses_list))
+    detailGetter = XmlGetter()
+    for i in detail_courses:
+        detailGetter.add_get_content_coroutine(i)
+    print('Please wait, getting all sections...')
+    a = detailGetter.run_getter()
+    all_detail = JsonDumper(a)
 
-print('Time used: ', time.time() - start)
+    all_detail.dump('allCourses.json', True)
+
+    print('Time used: ', time.time() - start)
