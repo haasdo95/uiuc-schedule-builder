@@ -82,18 +82,28 @@ export class SchedulingToolkitService {
      */
     createBigSectionGenerator(bigSectionAlreadyTyped: Section[][]): IterableIterator<Section[]> {
         const gen = function* () {
-            function* doCartesian(i, prod) {
+            const doCartesian = (function * (i, prod: Section[]) {
                 if (i == bigSectionAlreadyTyped.length) {
-                    yield prod;
+                    let shouldYield = true;
+                    for (let i=0; i<prod.length-1; ++i) {
+                        for (let j=i+1; j<prod.length; ++j) {
+                            if (this.sectionOverlap(prod[i], prod[j])) {
+                                shouldYield = false;
+                            }
+                        }
+                    }
+                    if (shouldYield) {
+                        yield prod;
+                    }
                 } else {
                     for (let j = 0; j < bigSectionAlreadyTyped[i].length; j++) {
                         yield* doCartesian(i + 1, prod.concat([bigSectionAlreadyTyped[i][j]]));
                     }
                 }
-            }
+            }).bind(this)
             yield* doCartesian(0, []);
         }
-        return gen();
+        return (gen.bind(this))();
     }
 
     /**
@@ -196,6 +206,8 @@ export class SchedulingToolkitService {
      * @param courses
      */
     createStateMachine(courses: Class[]): IterableIterator<Section[]> {
+        console.log("COURSES: ", courses.map(c => c.name));
+        
         var gen = function * () {
             while (courses.length) {
                 // TODO: Notify the user before showing suboptimal scheduling

@@ -30,7 +30,9 @@ router.post('/courses', function (req, res) {
         if (err) {
             return res.json({courses: []});
         }
-        return res.json({courses: result});
+        return res.json({courses: result.sort(
+            (x, y) => req.body.courseNames.indexOf(x.name) - req.body.courseNames.indexOf(y.name)
+        )});
     })
 })
 
