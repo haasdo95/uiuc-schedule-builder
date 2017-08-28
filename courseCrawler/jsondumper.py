@@ -1,21 +1,31 @@
 import json
 
-from infoExtractor import infoExtractor
+from InfoExtractor import InfoExtractor
 import pymongo
 from pymongo import MongoClient
 import copy
 
 
-class json_dumper(infoExtractor):
+class JsonDumper(InfoExtractor):
+    """
+    This class is inherited from
+    """
+
     def __init__(self, text):
-        super(json_dumper, self).__init__(text)
+        super(JsonDumper, self).__init__(text)
         client = MongoClient('localhost', 27017)
         self.db = client['scheduler']
 
     def dump(self, fileName, insertDB):
+
+        """
+
+        :param fileName: The file name of the json dump
+        :param insertDB: if True, then all of the data will be inserted into mongoDB
+        """
         classList = []
         f = open(fileName, 'w')
-        with open('errorLog','w') as err:
+        with open('errorLog', 'w') as err:
             for i in self.b:
                 name = i.find('ns2:course')['id']
                 detail = i.find_all('detailedSection')
@@ -30,15 +40,10 @@ class json_dumper(infoExtractor):
                                    'time': {'from': m.start.get_text().strip(), 'to': m.end.get_text().strip()}}
                         sections.append({'section': section, 'crn': crn, 'type': type, 'meetings': meeting})
                     except:
-                        print('CourseName:',name,file=err)
-                        print(j.prettify("utf-8"),file=err)
+                        print('CourseName:', name, file=err)
+                        print(j.prettify("utf-8"), file=err)
                     post = {'name': name, 'sections': sections}
                 classList.append(copy.deepcopy(post))
                 if insertDB:
                     self.db.posts.insert_one(post)
-            json.dump(classList, fp=f)
-
-    def cahce_xml(self):
-        for i in self.b:
-            with open('./cached_xml/' + i.find('ns2:course')['id'] + '.xml', 'w') as f:
-                print(i, file=f)
+            json.dump({'courses': classList}, fp=f)
