@@ -1,13 +1,5 @@
-const weekMap = {
-    'M': 'Monday',
-    'T': 'Tuesday',
-    'W': 'Wednesday',
-    'R': 'Thursday',
-    'F': 'Friday'
-}
-
 import * as moment from 'moment';
-import { Moment } from 'moment'
+import { Moment } from 'moment';
 
 export interface Range {
     from: Moment;
@@ -39,6 +31,7 @@ export class Meeting {
 }
 
 export class Section {
+    courseName: string;
     section: string;
     crn: string;
     type: string;

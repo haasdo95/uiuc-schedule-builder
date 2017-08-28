@@ -141,10 +141,10 @@ export class SchedulingToolkitService {
         }).bind(this)
 
     /**
-     * the true business of the WHOLE project
+     * returns a generator that could only generate the "optimal" schedule
      * @param courses
      */
-    createStateMachine(courses: Class[]): IterableIterator<Section[]> {
+    createStateMachineOnlyOptimal(courses: Class[]): IterableIterator<Section[]> {
 
         const bigSectionIndices = new Array(courses.length).fill(0);
 
@@ -191,4 +191,21 @@ export class SchedulingToolkitService {
         return retVal;
     }
 
+    /**
+     * the true business of the WHOLE project
+     * @param courses
+     */
+    createStateMachine(courses: Class[]): IterableIterator<Section[]> {
+        var gen = function * () {
+            while (courses.length) {
+                // TODO: Notify the user before showing suboptimal scheduling
+                yield * this.createStateMachineOnlyOptimal(courses);
+                courses.pop();
+            }
+        }
+        gen = gen.bind(this);
+        return gen();
+    }
 }
+
+
