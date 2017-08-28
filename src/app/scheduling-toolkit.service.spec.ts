@@ -295,6 +295,33 @@ fdescribe('schedule sections should work', () => {
 
 });
 
+fdescribe('create state machine only optimal should work', () => {
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [SchedulingToolkitService]
+        });
+    });
+
+    it('create state machine only optimal should work 1', inject([SchedulingToolkitService], (service: SchedulingToolkitService) => {
+        const cs125 = pseudo_db[0];
+        const cs173 = pseudo_db[2];
+
+        const fits = Array.from(service.createStateMachineOnlyOptimal([cs125, cs173]));
+        console.log(fits);
+        expect(fits.length).toBe(1);
+    }));
+
+    it('create state machine only optimal should work 2', inject([SchedulingToolkitService], (service: SchedulingToolkitService) => {
+        const cs225 = pseudo_db[1];
+        const cs173 = pseudo_db[2];
+
+        const fits = Array.from(service.createStateMachineOnlyOptimal([cs225, cs173]));
+        console.log(fits);
+        expect(fits.length).toBe(3);
+    }));
+
+});
+
 fdescribe('create state machine should work', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -308,7 +335,7 @@ fdescribe('create state machine should work', () => {
 
         const fits = Array.from(service.createStateMachine([cs125, cs173]));
         console.log(fits);
-        expect(fits.length).toBe(1);
+        expect(fits.length).toBe(2);
     }));
 
     it('create state machine should work 2', inject([SchedulingToolkitService], (service: SchedulingToolkitService) => {
@@ -317,7 +344,16 @@ fdescribe('create state machine should work', () => {
 
         const fits = Array.from(service.createStateMachine([cs225, cs173]));
         console.log(fits);
-        expect(fits.length).toBe(3);
+        expect(fits.length).toBe(4);
     }));
 
-});
+    it('create state machine should work 3', inject([SchedulingToolkitService], (service: SchedulingToolkitService) => {
+        const cs225 = pseudo_db[1];
+        const cs173 = pseudo_db[2];
+
+        const fits = Array.from(service.createStateMachine([cs173, cs225]));
+        console.log(fits);
+        expect(fits.length).toBe(6);
+    }));
+
+})

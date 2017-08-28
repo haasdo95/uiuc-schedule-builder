@@ -6,8 +6,19 @@ import 'rxjs/add/operator/pairwise';
 import 'rxjs/add/operator/partition';
 import 'rxjs/add/operator/switchMap';
 
+import * as moment from 'moment';
+import { Moment } from 'moment';
+
 import { Class, Section, Meeting, Range } from './class-section'
 import { SchedulingToolkitService } from './scheduling-toolkit.service'
+
+const weekDict = {
+    'M': 'Mon',
+    'T': 'Tue',
+    'W': 'Wed',
+    'R': 'Thu',
+    'F': 'Fri'
+}
 
 /**
  * IMPORTANT: To avoid further confusion, we call sections
@@ -59,7 +70,31 @@ export class AppComponent implements OnInit {
      * should contain the optimized schedule.
      * will become the Input of ScheduleComponent 
      */
-    sections: Section[] = null;
+    _sections: Section[] = null;
+    events: any[] = [];
+
+    get sections () {
+        return this._sections;
+    }
+    set sections (newValue: Section[]) {
+        this._sections = newValue;
+        if (!newValue) {
+            this.events = [];
+            console.log("WTF???");
+            return;
+        }
+        this.events = [];
+        for (const sec of newValue) {
+            for (const wkDay of sec.meetings.date) {
+                const weekday = weekDict[wkDay] as string;
+                this.events.push({
+                    title: sec.courseName + '\n' + sec.type + '\n' + sec.section,
+                    start: moment(weekday + ' ' + sec.meetings.time.from, 'ddd hh:mm A').format(),
+                    end: moment(weekday + ' ' + sec.meetings.time.to, 'ddd hh:mm A').format()
+                })
+            }
+        }
+    }
 
     constructor(
         private cis: CourseInfoService,
@@ -90,14 +125,6 @@ export class AppComponent implements OnInit {
                  })
     }
 
-    resetStateMachine() {
-        console.log("NEW STUFF");
-    }
-
-    goOnWithCurrFSM() {
-        console.log("OLD STUFF");
-    }
-
     /**
      * A trivial method to compare string[]
      * @param prev 
@@ -126,4 +153,7 @@ export class AppComponent implements OnInit {
         }
         this.courseNamesSubject.next(courses);
     }
+
+
+
 }

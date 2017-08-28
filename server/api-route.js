@@ -34,4 +34,13 @@ router.post('/courses', function (req, res) {
     })
 })
 
+router.get('/courselist', function (req, res) {
+    Course.find({}, {_id: 0}, (err, result) => {
+        if (err) {
+            return res.json({list: []});
+        }
+        return res.json({list: result.map(r => r.name)});
+    })
+})
+
 module.exports = router;

@@ -4,6 +4,7 @@ import { CourseInfoService } from '../course-info.service'
 import { Class } from '../class-section'
 import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/debounceTime';
 
 @Component({
   selector: 'app-form',
@@ -95,7 +96,14 @@ export class FormComponent implements OnInit, OnDestroy {
             const fc = this.classesFormArray.controls[index] as FormControl;
             this.subscriptions.push(
                 fc.valueChanges
-                    .map(txt => txt.toUpperCase())
+                    .debounceTime(300)
+                    .map(txt => txt.toUpperCase() as string)
+                    .map(txt => {
+                            const match = txt.match(/([A-Z]+)([0-9]+)/);
+                            if (!match) return txt;
+                            return match.slice(1).join(" ");
+                        }
+                    )
                     .subscribe((prefix) => {
                         this.showHints(prefix, index);
                     }
@@ -114,8 +122,10 @@ export class FormComponent implements OnInit, OnDestroy {
         if (!prefix) {
             this.hints[idx] = [];
         } else {
-            this.hints[idx] = this.cis.getCourseList()
-                                .getWordsWithPrefix(prefix.toUpperCase());
+            this.cis.getCourseList()
+                .subscribe(t => {
+                    this.hints[idx] = t.getWordsWithPrefix(prefix.toUpperCase());
+                })
         }
     }
 

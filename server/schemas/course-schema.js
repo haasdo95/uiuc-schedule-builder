@@ -27,13 +27,21 @@ var sectionSchema = new Schema({
     crn: String,
     type: String,
     meetings: meetingSchema
-}, { _id : false });
+}, {
+    _id : false,
+    'toJSON': { virtuals: true },
+    'toObject': { virtuals: true }
+});
 
 var courseSchema = new Schema({
     name: String,
     sections: [
         sectionSchema
     ]
+})
+
+sectionSchema.virtual("courseName").get(function () {
+    return this.parent().name
 })
 
 module.exports = courseSchema;
