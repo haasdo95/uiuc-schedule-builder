@@ -4,6 +4,8 @@ import * as _ from "lodash";
 import * as moment from 'moment';
 import { Moment } from 'moment'
 
+import { EXCEPTIONS } from './exceptions'
+
 @Injectable()
 export class SchedulingToolkitService {
 
@@ -51,6 +53,20 @@ export class SchedulingToolkitService {
      */
 
     /**
+     * 
+     */
+    groupClassSectionByBigSectionException(course: Class, exceptionType: string): Section[][] {
+        switch (exceptionType) {
+            case "PHYSlike":
+                // looks like these PHYS guys are pretty liberal in sections.
+                // you can attend both A1 and L4U and D2V
+                return [course.sections]; // have only one big section
+            default:
+                return null;
+        }
+    }
+
+    /**
      * e.g. CS 173 has A section and B section.
      * both A and B section has the set of classes needed(a lecture and a discussion)
      * 
@@ -60,6 +76,17 @@ export class SchedulingToolkitService {
      * @param course 
      */
     groupClassSectionByBigSection(course: Class): Section[][] {
+        // special cases handling
+        const deptName: string = course.name.split(" ")[0];
+        for (const exceptionType in EXCEPTIONS) {
+            if (deptName in EXCEPTIONS[exceptionType]) { // 
+                const except = this.groupClassSectionByBigSectionException(course, exceptionType);
+                if (except) {
+                    return except;
+                }
+            }
+        }
+        // "normal case"
         const sections =  _.groupBy(course.sections, sec => sec.section[0]);
         return _.values(sections);
     }
