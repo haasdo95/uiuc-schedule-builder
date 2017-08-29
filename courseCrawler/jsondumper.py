@@ -45,5 +45,5 @@ class JsonDumper(InfoExtractor):
                     post = {'name': name, 'sections': sections}
                 classList.append(copy.deepcopy(post))
                 if insertDB:
-                    self.db.posts.insert_one(post)
+                    self.db.courses.insert_one(post)
             json.dump({'courses': classList}, fp=f)
