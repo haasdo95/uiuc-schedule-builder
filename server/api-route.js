@@ -5,7 +5,7 @@ var router = express.Router();
 // set up database
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise
-mongoose.connect('mongodb://127.0.0.1:27017/scheduler');
+mongoose.connect('mongodb://GuohaoDou:Dudu040803@ds111204.mlab.com:11204/uiuc-scheduler');
 
 var db = mongoose.connection;
 db.once('open', function(callback) {
