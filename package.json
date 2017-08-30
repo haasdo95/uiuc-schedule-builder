@@ -28,8 +28,10 @@
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "mongoose": "^4.11.8",
+    "morgan": "^1.8.2",
     "primeng": "^4.1.0",
     "rxjs": "^5.2.0",
+    "serve-favicon": "^2.4.3",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
