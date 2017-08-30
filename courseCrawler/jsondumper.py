@@ -14,7 +14,7 @@ class JsonDumper(InfoExtractor):
     def __init__(self, text):
         super(JsonDumper, self).__init__(text)
         client = MongoClient('localhost', 27017)
-        self.db = client['scheduler']
+        self.db = client['uiuc-scheduler']
 
     def dump(self, fileName, insertDB):
 
