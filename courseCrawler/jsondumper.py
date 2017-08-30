@@ -14,7 +14,7 @@ class JsonDumper(InfoExtractor):
     def __init__(self, text):
         super(JsonDumper, self).__init__(text)
         client = MongoClient('localhost', 27017)
-        self.db = client['scheduler']
+        self.db = client['uiuc-scheduler']
 
     def dump(self, fileName, insertDB):
 
@@ -45,5 +45,5 @@ class JsonDumper(InfoExtractor):
                     post = {'name': name, 'sections': sections}
                 classList.append(copy.deepcopy(post))
                 if insertDB:
-                    self.db.posts.insert_one(post)
+                    self.db.courses.insert_one(post)
             json.dump({'courses': classList}, fp=f)
