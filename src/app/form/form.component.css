@@ -1,25 +1,50 @@
 ul {
     list-style:none;
-    padding-left:15px;
+    padding-left:0px;
 }
 
-.md-form {
-    margin-bottom: 0px;
+input {
+    border: 2pt solid;
+    border-color: inherit;
 }
 
-.input-group-btn {
-    padding-bottom: 2px;
-    padding-top: 2px;
+.embedButton {
+    background-color: transparent;
+    color: inherit;
+    border: 2pt solid;
+}
+
+.embedButton:hover {
+    color: white;
+    border-width: 2pt;
+}
+
+.insertButton {
+    border-top-left-radius: 999em;
+    border-bottom-left-radius: 999em;
+    border-right-width: 0;
+}
+
+.insertButton:hover {
+    background-color: #5cb85c;
+    border-color: #5cb85c;
 }
 
 .deleteButton {
-    border-radius: 100px;
-    position: relative;
-    top: 2px;
+    border-top-right-radius: 999em;
+    border-bottom-right-radius: 999em;
+    border-left-width: 0;
+}
+
+.deleteButton:hover {
+    background-color: #d9534f;
+    border-color: #d9534f;
 }
 
 .formHeading {
-    width: 100%;
+    background-color: transparent;
+    color: #212121;
+    border: 2pt solid #212121;
     height: 100%;
-    border-radius: 10000px;
+    border-radius: 999em;
 }

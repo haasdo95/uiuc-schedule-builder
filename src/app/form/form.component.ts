@@ -170,6 +170,8 @@ export class FormComponent implements OnInit, OnDestroy {
         fc.setValue(this.hints[idx][0]);
     }
 
+    colorArray = ["#2196F3", "#388E3C", "#7CB342", "#C0CA33", "#FDD835", "#FFB300", "#FB8C00", "#FF5722", "#F44336", "#9C27B0", "#673AB7", "#3F51B5"]
+
     constructor(private cis: CourseInfoService) { }
 
     ngOnInit() {
