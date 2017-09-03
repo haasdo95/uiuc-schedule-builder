@@ -21,7 +21,10 @@ export class SchedulingToolkitService {
     }
 
     /**
-     * Refactered to be more efficient.
+     * compare the weekday strings, (e.g. MWF, TR), first
+     * an overlap is impossible if they don't have intersection.
+     * 
+     * if they do have intersection of weekday strings, check their time slots with rangeOverlap
      * @param m1 
      * @param m2 
      */
@@ -36,7 +39,8 @@ export class SchedulingToolkitService {
     }
 
     /**
-     * a trivial wrapper of meetingOverlap
+     * return true if two sections overlap.
+     * kind of a trivial wrapper of meetingOverlap
      * @param s1 
      * @param s2 
      */
@@ -53,7 +57,10 @@ export class SchedulingToolkitService {
      */
 
     /**
-     * 
+     * method to handle classes that do not follow our assumptions on 
+     * section code (e.g. ADB, AL1)
+     * @param course 
+     * @param exceptionType type of the exception. e.g PHYSlike 
      */
     groupClassSectionByBigSectionException(course: Class, exceptionType: string): Section[][] {
         switch (exceptionType) {
@@ -67,8 +74,13 @@ export class SchedulingToolkitService {
     }
 
     /**
+     * BASIC ASSUMPTION:
+     *      the first letter of the section code (e.g. ADB, AL1)
+     *      indicate the "big section" of this section
+     * 
      * e.g. CS 173 has A section and B section.
-     * both A and B section has the set of classes needed(a lecture and a discussion)
+     * both A and B section has the set of classes needed (a lecture and a discussion)
+     * you cannot sign up for the lecture of A section and the discussion of B section
      * 
      * this is a method to group sections of a class by "big sections"
      * (dude I know the terminology sucks)
@@ -112,6 +124,7 @@ export class SchedulingToolkitService {
             const doCartesian = (function * (i, prod: Section[]) {
                 if (i == bigSectionAlreadyTyped.length) {
                     let shouldYield = true;
+                    // e.g won't yield if a lecture has time conflict with its own discussion
                     for (let i=0; i<prod.length-1; ++i) {
                         for (let j=i+1; j<prod.length; ++j) {
                             if (this.sectionOverlap(prod[i], prod[j])) {
@@ -150,7 +163,7 @@ export class SchedulingToolkitService {
 
     /**
      * the helper method for creating state machine.
-     * should schedule sections given big sections(bsat) of each courses
+     * should schedule sections given big sections that are already type-grouped of courses
      */
     scheduleCourses: (bsat: Section[][][], index: number, chosenSections: Section[]) => IterableIterator<Section[]> =
         (function * (
@@ -163,7 +176,7 @@ export class SchedulingToolkitService {
             if (index == bigSectionsAlreadyTyped.length) { // you made it!
                 yield chosenSections;
             } else {
-                // TODO: The logic for suboptimal scheduling comes here
+                // prune and recurse. that's it.
                 let bigSectionAlreadyTyped = bigSectionsAlreadyTyped[index];
                 const pruned = this.pruneBigSection(bigSectionAlreadyTyped, chosenSections);
                 const iter = this.createBigSectionGenerator(pruned);
@@ -187,7 +200,6 @@ export class SchedulingToolkitService {
 
         const bigSectionsOfCourses: Section[][][] = [];
         for (const course of courses) {
-            // TODO: Take care of exceptions like PHYS!!!
             bigSectionsOfCourses.push(this.groupClassSectionByBigSection(course));
         }
 
@@ -203,6 +215,7 @@ export class SchedulingToolkitService {
                     (bsoc, index) => this.groupClassSectionBySectionType(bsoc[bigSectionIndices[index]])
                 )
 
+                // generate optimal schedule given current set of type-grouped big sections
                 yield * this.scheduleCourses(
                     chosenBigSectionsAlreadyTyped,
                     0,
@@ -239,7 +252,9 @@ export class SchedulingToolkitService {
             while (courses.length) {
                 // TODO: Notify the user before showing suboptimal scheduling
                 yield * this.createStateMachineOnlyOptimal(courses);
-                courses.pop();
+                // will pop off least-prioritized course every time
+                // we exhausted an optimal generator
+                courses.pop(); 
             }
         }
         gen = gen.bind(this);

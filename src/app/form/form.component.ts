@@ -6,6 +6,10 @@ import { Subscription } from 'rxjs/Subscription';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
 
+/**
+ * this component is only responsible for taking in user input and channel them to AppComponent
+ */
+
 @Component({
   selector: 'app-form',
   templateUrl: './form.component.html',
@@ -19,20 +23,22 @@ export class FormComponent implements OnInit, OnDestroy {
     /**
      * The input array where users input their courses
      */
-    classesFormArray = new FormArray([
+    private classesFormArray = new FormArray([
         new FormControl(),
         new FormControl(),
         new FormControl()
     ])
 
-    formModel: FormGroup = new FormGroup({
+    private formModel: FormGroup = new FormGroup({
         classes: this.classesFormArray
     })
 
     /**
      * A trivial method to remove or add input boxes
+     * if idx is -1, it means we want to append an input box
+     * otherwise, idx is a non-negative integer, which denotes the input box to remove.
      */
-    oneMoreLess(idx: number) {
+    oneMoreOrOneLess(idx: number) {
         this.reinitSubscriptions();
         if (idx == -1) {
             this.classesFormArray.push(new FormControl());
@@ -43,7 +49,8 @@ export class FormComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * A method to insert an input box
+     * a method to insert an input box
+     * fired where the user hits the "+" button
      * @param idx 
      */
     insertCourse(idx: number) {
@@ -70,7 +77,7 @@ export class FormComponent implements OnInit, OnDestroy {
      * Subscriptions used to listen on the input boxes
      * Unsubscribed when the user makes changes to prevent mem leak
      */
-    subscriptions: Subscription[] = [];
+    private subscriptions: Subscription[] = [];
 
     /**
      * The structure used to contain auto-completion hints
@@ -89,7 +96,6 @@ export class FormComponent implements OnInit, OnDestroy {
 
     /**
      * A method to handle autocomplete by subcribing to all.
-     * TODO: implement the whole thing
      */
     private handleAutocomplete() {
         for (let index = 0; index < this.classesFormArray.controls.length; ++index) {

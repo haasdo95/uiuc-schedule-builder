@@ -1,7 +1,7 @@
 <form [formGroup]="formModel">
     <div class="row">
         <div class="col-xs-12 col-lg-6 my-1">
-            <button (click)="oneMoreLess(-1)" type="button" class="formHeading btn btn-danger 
+            <button (click)="oneMoreOrOneLess(-1)" type="button" class="formHeading btn btn-danger 
                 waves-effect waves-light">One More Class!</button>
         </div>
         <div class="col-xs-12 col-lg-6 my-1">
@@ -23,7 +23,7 @@
                             </button>
                         </div>
                         <div class="input-group-btn">
-                            <button (click)="oneMoreLess(i)"
+                            <button (click)="oneMoreOrOneLess(i)"
                                 class="deleteButton btn btn-danger my-0 waves-effect waves-light">
                                 <i class="fa fa-times"></i>
                             </button>
