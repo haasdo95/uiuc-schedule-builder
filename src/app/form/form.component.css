@@ -10,6 +10,13 @@ input {
     border-right-width: 0px;
 }
 
+input:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border-top: .1em solid;
+    border-bottom: .1em solid;
+}
+
 .serious-margin-hack {
     margin-bottom: 2em;
 }

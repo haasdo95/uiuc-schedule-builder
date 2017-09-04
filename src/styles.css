@@ -19,3 +19,16 @@
 i {
     -webkit-text-stroke: .1em white;
 }
+
+.fc * {
+    border-left-width: 0 !important;
+    border-right-width: 0 !important;
+}
+
+.ui-widget-header {
+    background: none !important;
+}
+
+.fc-content {
+    
+}
