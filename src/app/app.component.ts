@@ -138,13 +138,13 @@ export class AppComponent implements OnInit {
             count += 1;
         }
 
-        console.log("MAPPING: ", courseName2Color);
-        
         for (const sec of newValue) {
             for (const wkDay of sec.meetings.date) {
                 const weekday = weekDict[wkDay] as string;
                 this.events.push({
-                    title: sec.courseName + '\n' + sec.type + '\n' + sec.section,
+                    title: sec.crn + ' - ' + sec.courseName
+                            + '\n' + sec.type + 
+                           ' - ' + sec.section,
                     start: moment(weekday + ' ' + sec.meetings.time.from, 'ddd hh:mm A').format(),
                     end: moment(weekday + ' ' + sec.meetings.time.to, 'ddd hh:mm A').format(),
                     color: courseName2Color[sec.courseName][1],

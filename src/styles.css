@@ -29,6 +29,6 @@ i {
     background: none !important;
 }
 
-.fc-content {
-    
+.fc-agendaWeek-view tr {
+    height: 2em !important;
 }

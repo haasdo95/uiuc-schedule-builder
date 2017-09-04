@@ -18,7 +18,7 @@ export class ScheduleComponent implements OnInit {
     @Input() events: any[];
 
     options: any = {
-        columnFormat: 'ddd'
+        columnFormat: 'ddd',
     }
 
     constructor() { }
