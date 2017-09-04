@@ -4,19 +4,36 @@ ul {
 }
 
 input {
-    border: 2pt solid;
+    border: .1em solid;
     border-color: inherit;
+    border-left-width: 0px;
+    border-right-width: 0px;
+}
+
+.serious-margin-hack {
+    margin-top: 2em;
+    margin-bottom: 2em;
+}
+
+.pad-hack {
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    font-size: 14pt;
 }
 
 .embedButton {
     background-color: transparent;
     color: inherit;
-    border: 2pt solid;
+    border: .1em solid;
 }
 
 .embedButton:hover {
     color: white;
-    border-width: 2pt;
+    border-width: .1em;
+}
+
+.embedButton:hover>i {
+    -webkit-text-stroke: 0px white !important;
 }
 
 .insertButton {
@@ -28,23 +45,31 @@ input {
 .insertButton:hover {
     background-color: #5cb85c;
     border-color: #5cb85c;
+    border-right-width: 0;
 }
 
 .deleteButton {
     border-top-right-radius: 999em;
     border-bottom-right-radius: 999em;
     border-left-width: 0;
+    padding-top: 0.1em;
+    padding-bottom: 0.3em;
 }
 
 .deleteButton:hover {
     background-color: #d9534f;
     border-color: #d9534f;
+    border-left-width: 0;
 }
 
 .formHeading {
     background-color: transparent;
     color: #212121;
-    border: 2pt solid #212121;
-    height: 100%;
+    border: .1em solid #212121;
     border-radius: 999em;
+}
+
+.formHeading:hover {
+    background-color: #212121;
+    color: white;
 }

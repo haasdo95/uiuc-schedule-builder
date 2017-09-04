@@ -1,27 +1,28 @@
 <form [formGroup]="formModel">
     <div class="form-group">
         <button (click)="oneMoreOrOneLess(-1)" type="button" 
-        class="btn btn-block formHeading
+        class="btn btn-block formHeading pad-hack
         ">ONE MORE CLASS!</button>
         
-        <div class="mt-3">
-            <ul class="mt-3" formArrayName="classes">
-                <li class="mb-4" *ngFor="let c of formModel.controls['classes'].controls; let i=index"> 
+        <div class="serious-margin-hack">
+            <ul class="" formArrayName="classes">
+                <li class="mb-3" *ngFor="let c of formModel.controls['classes'].controls; let i=index"> 
                     <div [style.border-color]="colorArray[i % colorArray.length]" class="input-group">
                         <span [style.color]="colorArray[i % colorArray.length]" class="input-group-btn">
                             <button (click)="insertCourse(i)"
-                                class="insertButton btn my-0 embedButton">
+                                class="insertButton btn my-0 embedButton pad-hack">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </span>
-                        <input (keydown.tab)="fillWithFirst(c, i, $event)" (keydown.enter)="fillWithFirst(c, i, $event)"
+                        <input [style.color]="colorArray[i % colorArray.length]"
+                         (keydown.tab)="fillWithFirst(c, i, $event)" (keydown.enter)="fillWithFirst(c, i, $event)"
                             placeholder="e.g. CS 225"
                             (focus)="showHints(c.value, i)" (blur)="hideHints($event, i)" type="text" id="_{{i}}"
-                            name="_{{i}}" class="form-control d-inline fancy-input" [formControlName]="i">
+                            name="_{{i}}" class="form-control d-inline pad-hack" [formControlName]="i">
                         
                         <span [style.color]="colorArray[i % colorArray.length]" class="input-group-btn">
                             <button (click)="oneMoreOrOneLess(i)"
-                                class="deleteButton btn my-0 embedButton">
+                                class="deleteButton btn my-0 embedButton pad-hack">
                                 <i class="fa fa-times"></i>
                             </button>
                         </span>
@@ -34,7 +35,7 @@
         </div>
 
         <button (click)="generate()" type="button" 
-        class="btn btn-block formHeading
+        class="btn btn-block formHeading pad-hack
         ">GENERATE A SCHEDULE!</button>
     </div>
 </form>

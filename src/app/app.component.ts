@@ -9,8 +9,12 @@ import 'rxjs/add/operator/switchMap';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 
+import * as _ from "lodash";
+
 import { Class, Section, Meeting, Range } from './class-section'
 import { SchedulingToolkitService } from './scheduling-toolkit.service'
+
+import { primaryColors, secondaryColors } from './color-choice'
 
 /**
  * this component is responsible for 
@@ -126,13 +130,25 @@ export class AppComponent implements OnInit {
             return;
         }
         this.events = [];
+        const groupedByCourseName = _.groupBy(newValue, (sec) => sec.courseName);
+        let count = 0;
+        let courseName2Color: any = {};
+        for (let courseName in groupedByCourseName) {
+            courseName2Color[courseName] = [primaryColors[count % primaryColors.length], secondaryColors[count % primaryColors.length]];
+            count += 1;
+        }
+
+        console.log("MAPPING: ", courseName2Color);
+        
         for (const sec of newValue) {
             for (const wkDay of sec.meetings.date) {
                 const weekday = weekDict[wkDay] as string;
                 this.events.push({
                     title: sec.courseName + '\n' + sec.type + '\n' + sec.section,
                     start: moment(weekday + ' ' + sec.meetings.time.from, 'ddd hh:mm A').format(),
-                    end: moment(weekday + ' ' + sec.meetings.time.to, 'ddd hh:mm A').format()
+                    end: moment(weekday + ' ' + sec.meetings.time.to, 'ddd hh:mm A').format(),
+                    color: courseName2Color[sec.courseName][1],
+                    textColor: courseName2Color[sec.courseName][0]
                 })
             }
         }

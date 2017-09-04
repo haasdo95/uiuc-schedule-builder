@@ -9,4 +9,13 @@
 /* this may screw up font-awesome icons for some reason without the "not" */
 *:not(i) {
     font-family: 'Dosis', sans-serif !important;
+    font-weight: 500 !important;
+}
+
+.btn {
+    cursor: pointer !important;
+}
+
+i {
+    -webkit-text-stroke: .1em white;
 }
