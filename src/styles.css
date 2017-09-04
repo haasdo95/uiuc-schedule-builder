@@ -21,14 +21,47 @@ i {
 }
 
 .fc * {
-    border-left-width: 0 !important;
-    border-right-width: 0 !important;
+    border-color: #9E9E9E;
+    border-width: .15em 0 .15em 0 !important;
 }
 
+/* Property of the header */
 .ui-widget-header {
     background: none !important;
+    vertical-align: middle !important;
+    border-color: #9E9E9E;
+    border-bottom-width: 0 !important;
+    border-top-width: 0 !important;
+    color: #9E9E9E !important;
 }
 
+/* Color of time */
+.ui-widget-content {
+    color: #9E9E9E !important;
+}
+
+/* Row Height */
 .fc-agendaWeek-view tr {
     height: 2em !important;
+}
+
+/* Envent property */
+.fc-event {
+    border-radius: 1em;
+    border-width: 0 !important;
+    padding-top: .1em;
+    padding-left: .5em;
+    padding-bottom: .1em;
+    padding-right: .5em;
+}
+
+/* Property of the line at x hour 30 minutes */
+.fc-time-grid .fc-slats .fc-minor td {
+    border-top-style: solid !important;
+    border-top-width: .075em !important;
+}
+
+/* Top line of the whole table */
+.fc-head-container{
+    border-top-width: .15em !important;
 }
