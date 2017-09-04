@@ -1,8 +1,5 @@
 <form [formGroup]="formModel">
     <div class="form-group">
-        <button (click)="oneMoreOrOneLess(-1)" type="button" 
-        class="btn btn-block formHeading pad-hack
-        ">ONE MORE CLASS!</button>
         
         <div class="serious-margin-hack">
             <ul class="" formArrayName="classes">
@@ -34,8 +31,18 @@
             </ul>
         </div>
 
-        <button (click)="generate()" type="button" 
-        class="btn btn-block formHeading pad-hack
-        ">GENERATE A SCHEDULE!</button>
+        <div class="row">
+            <div class="col-sm-6 col-lg-12 mb-3">
+                <button (click)="oneMoreOrOneLess(-1)" type="button" 
+                class="btn btn-block formHeading pad-hack
+                ">ONE MORE CLASS!</button>
+            </div>
+            <div class="col-sm-6 col-lg-12">
+                <button (click)="generate()" type="button" 
+                class="btn btn-block formHeading pad-hack
+                ">GENERATE A SCHEDULE!</button>
+            </div>
+        </div>
+
     </div>
 </form>
