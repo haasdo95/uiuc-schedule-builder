@@ -121,12 +121,24 @@ export class FormComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * fill the input box at idx with chosen hint
+     * @param hint 
+     * @param idx 
+     */
+    fillOut(hint: string, idx: number) {
+        console.log("FILLING OUT!!!");
+        this.classesFormArray.at(idx).setValue(hint, {emitEvent: false});
+        this.hints[idx] = []; // flushing too.
+    }
+
+    /**
      * Method used to fill the corresponding entry 
      * in this.hints with the help of cis service
      * @param prefix 
      * @param idx 
      */
     showHints(prefix: string, idx: number) {
+        console.log("FOCUSED!!!");
         if (!prefix) {
             this.hints[idx] = [];
         } else {
@@ -153,7 +165,7 @@ export class FormComponent implements OnInit, OnDestroy {
         if (t && t.classList.contains('dontBlur')) {
             return;
         }
-        this.hints[idx] = [];
+        this.hints[idx] = [];        
     }
 
     /**

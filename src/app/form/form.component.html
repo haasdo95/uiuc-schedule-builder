@@ -24,9 +24,19 @@
                             </button>
                         </span>
                     </div>
-                    <app-autocomplete-hints (chosen)="hideHints(null, $event)"
-                        [index]="i" [ctrl]="c" [hints]="hints[i]">
-                    </app-autocomplete-hints>
+                    <!-- auto-complete -->
+                    <div class="container">
+                        <div class="row pl-5">
+                            <div *ngFor="let hint of hints[i]; let j = index" class="col-xs-2">
+                                <button (click)="fillOut(hint, i)" type="button" 
+                                    [class.btn-outline-info]="j != 0" [class.btn-info]="j == 0"
+                                    class="dontBlur btn btn-sm">
+                                    {{hint}}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end of auto-complete -->
                 </li>
             </ul>
         </div>
