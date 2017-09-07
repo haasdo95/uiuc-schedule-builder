@@ -6,6 +6,8 @@ import 'rxjs/add/operator/pairwise';
 import 'rxjs/add/operator/partition';
 import 'rxjs/add/operator/switchMap';
 
+import * as MyWorker from "worker-loader!./worker/worker";
+
 import * as moment from 'moment';
 import { Moment } from 'moment';
 
@@ -164,12 +166,14 @@ export class AppComponent implements OnInit {
      * which generates a new schedule every time the user hits the GENERATE button
      */
     private stateMachine: IterableIterator<Section[]> = this.stk.createStateMachine([]);
+    private worker: Worker = new MyWorker();
 
     ngOnInit() {
         // initialize the stream of course names
         this.courseNamesSubject = new Subject();
         this.courseNamesObservable = this.courseNamesSubject.asObservable();
 
+        this.worker.postMessage("hello from master!");
         /**
          * (1)  used pairwise operator to find out if the user has submitted a new 
          *      set of course names.

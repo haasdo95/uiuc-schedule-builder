@@ -1,0 +1,5 @@
+{
+  "globalDependencies": {
+    "custom": "file:custom.d.ts"
+  }
+}
