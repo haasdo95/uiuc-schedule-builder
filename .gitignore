@@ -8,7 +8,7 @@
 /node_modules
 
 # IDEs and editors
-courseCrawler/.idea
+./courseCrawler/.idea
 /.idea
 .project
 .classpath
