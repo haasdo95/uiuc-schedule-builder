@@ -1,13 +1,11 @@
-import { Injectable } from '@angular/core';
-import { Class, Section, Meeting, Range } from './class-section'
+import { Class, Section, Meeting, Range } from '../class-section'
 import * as _ from "lodash";
 import * as moment from 'moment';
-import { Moment } from 'moment'
+import { Moment } from 'moment';
 
-import { EXCEPTIONS } from './exceptions'
+import { EXCEPTIONS } from '../exceptions';
 
-@Injectable()
-export class SchedulingToolkitService {
+export class SchedulingWorker {
 
     constructor() { }
 
@@ -262,4 +260,17 @@ export class SchedulingToolkitService {
     }
 }
 
+var service = new SchedulingWorker();
+var stateMachine = service.createStateMachine([]);
 
+self.onmessage = (e) => {
+    const payload = e.data;
+    if (!payload) return;
+    if (payload.reset) {
+        const courses = <Class[]> payload.courses;
+        stateMachine = service.createStateMachine(courses);
+    }
+    // workaround
+    const scheduledSections = stateMachine.next().value;
+    postMessage.apply(null, [scheduledSections]);
+}

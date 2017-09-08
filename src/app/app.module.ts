@@ -8,14 +8,12 @@ import { ScheduleModule } from 'primeng/primeng'
 import { AppComponent } from './app.component';
 import { FormComponent } from './form/form.component';
 import { ScheduleComponent } from './schedule/schedule.component';
-import { AutocompleteHintsComponent } from './autocomplete-hints/autocomplete-hints.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     FormComponent,
     ScheduleComponent,
-    AutocompleteHintsComponent
   ],
   imports: [
     BrowserModule,

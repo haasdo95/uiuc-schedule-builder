@@ -5,7 +5,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-4">
-            <app-form (courses)="resetCourses($event)"></app-form>
+            <app-form [freezeGenerateButton]="freezeGenerateButton" (courses)="resetCourses($event)"></app-form>
         </div>
         <div class="col-lg-8">
             <app-schedule [events]="events" [sections]="sections"></app-schedule>

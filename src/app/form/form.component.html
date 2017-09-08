@@ -1,39 +1,59 @@
 <form [formGroup]="formModel">
-    <div class="row">
-        <div class="col-xs-12 col-lg-6 my-1">
-            <button (click)="oneMoreLess(-1)" type="button" class="formHeading btn btn-danger 
-                waves-effect waves-light">One More Class!</button>
-        </div>
-        <div class="col-xs-12 col-lg-6 my-1">
-            <button (click)="generate()" type="button" class="formHeading btn btn-info 
-                waves-effect waves-light">generate schedule!</button>
-        </div>
-        <div class="col-sm-12 mt-3">
-            <ul class="mt-3" formArrayName="classes">
-                <li class="mb-4" *ngFor="let c of formModel.controls['classes'].controls; let i=index"> 
-                    <div class="md-form input-group">
-                        <label for="_{{i}}" class="mr-3">Course {{i + 1}}:</label>   
-                        <input (keydown.tab)="fillWithFirst(c, i, $event)" (keydown.enter)="fillWithFirst(c, i, $event)"
-                            (focus)="showHints(c.value, i)" (blur)="hideHints($event, i)" type="text" id="_{{i}}"
-                            name="_{{i}}" class="form-control d-inline" [formControlName]="i">
-                        <div class="input-group-btn">
+    <div class="form-group">
+        
+        <div class="serious-margin-hack">
+            <ul class="" formArrayName="classes">
+                <li class="mb-3" *ngFor="let c of formModel.controls['classes'].controls; let i=index"> 
+                    <div [style.border-color]="colorArray[i % colorArray.length]" class="input-group">
+                        <span [style.color]="colorArray[i % colorArray.length]" class="input-group-btn">
                             <button (click)="insertCourse(i)"
-                                class="deleteButton btn btn-success my-0 waves-effect waves-light">
+                                class="insertButton btn my-0 embedButton pad-hack">
                                 <i class="fa fa-plus"></i>
                             </button>
-                        </div>
-                        <div class="input-group-btn">
-                            <button (click)="oneMoreLess(i)"
-                                class="deleteButton btn btn-danger my-0 waves-effect waves-light">
+                        </span>
+                        <input [style.color]="colorArray[i % colorArray.length]"
+                         (keydown.tab)="fillWithFirst(c, i, $event)" (keydown.enter)="fillWithFirst(c, i, $event)"
+                            placeholder="e.g. CS 225"
+                            (focus)="showHints(c.value, i)" (blur)="hideHints($event, i)" type="text" id="_{{i}}"
+                            name="_{{i}}" class="form-control d-inline pad-hack" [formControlName]="i">
+                        
+                        <span [style.color]="colorArray[i % colorArray.length]" class="input-group-btn">
+                            <button (click)="oneMoreOrOneLess(i)"
+                                class="deleteButton btn my-0 embedButton pad-hack">
                                 <i class="fa fa-times"></i>
                             </button>
+                        </span>
+                    </div>
+                    <!-- auto-complete -->
+                    <div class="container">
+                        <div class="row pl-5">
+                            <div *ngFor="let hint of hints[i]; let j = index" class="col-xs-2">
+                                <button (click)="fillOut(hint, i)" type="button" 
+                                    [class.btn-outline-info]="j != 0" [class.btn-info]="j == 0"
+                                    class="dontBlur btn btn-sm">
+                                    {{hint}}
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <app-autocomplete-hints (chosen)="hideHints(null, $event)"
-                        [index]="i" [ctrl]="c" [hints]="hints[i]">
-                    </app-autocomplete-hints>
+                    <!-- end of auto-complete -->
                 </li>
             </ul>
         </div>
+
+        <div class="row">
+            <div class="col-sm-6 col-lg-12 mb-3">
+                <button (click)="oneMoreOrOneLess(-1)" type="button" 
+                class="btn btn-block formHeading pad-hack
+                ">ONE MORE CLASS!</button>
+            </div>
+            <div class="col-sm-6 col-lg-12">
+                <button (click)="generate()" type="button"
+                [disabled]="freezeGenerateButton"
+                class="btn btn-block formHeading pad-hack
+                ">GENERATE A SCHEDULE!</button>
+            </div>
+        </div>
+
     </div>
 </form>

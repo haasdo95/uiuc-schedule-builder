@@ -11,10 +11,20 @@ export class CourseInfoService {
 
     constructor(private http: Http) { }
 
+    /**
+     * the Trie data structure to optimize auto-completion
+     */
     private courseNames: Trie = null;
 
+    /**
+     * ask the server for the whole list of course names and form a Trie
+     * and, to prevent further server query, cache it.
+     * 
+     * TODO: if the user types too fast, we could probably issue multiple queries,
+     *       which are extremely expensive.
+     *       switchMap looks promising here.
+     */
     getCourseList(): Observable<Trie> {
-        // return new Trie(pseudo_course_list);
         if (!this.courseNames) {
             return this.http.get('api/courselist')
                             .map(res => res.json().list as string[])
@@ -25,6 +35,10 @@ export class CourseInfoService {
         
     }
 
+    /**
+     * given an array of course names, ask the server for the course info
+     * @param names an array of course names
+     */
     getCoursesInfoByName(names: string[]): Observable<Class[]> {
         return this.http.post('api/courses', {courseNames: names})
                  .map(res => {

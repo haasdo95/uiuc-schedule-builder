@@ -1,6 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Section } from '../class-section'
 
+/**
+ * this component is only responsible for displaying the sections scheduled 
+ * by the scheduling toolkit (stk) in AppComponent
+ */
+
 @Component({
   selector: 'app-schedule',
   templateUrl: './schedule.component.html',
@@ -13,7 +18,7 @@ export class ScheduleComponent implements OnInit {
     @Input() events: any[];
 
     options: any = {
-        columnFormat: 'ddd'
+        columnFormat: 'ddd',
     }
 
     constructor() { }
