@@ -173,7 +173,11 @@ export class AppComponent implements OnInit {
         this.courseNamesSubject = new Subject();
         this.courseNamesObservable = this.courseNamesSubject.asObservable();
 
-        this.worker.postMessage("hello from master!");
+        this.worker.onmessage = (e) => {
+            console.log("SCHEDULED BY WORKER: ", e.data);
+            this.sections = <Section[]> e.data;
+        }
+
         /**
          * (1)  used pairwise operator to find out if the user has submitted a new 
          *      set of course names.
@@ -196,8 +200,12 @@ export class AppComponent implements OnInit {
                     this.cis.getCoursesInfoByName(courses)
                )
                .subscribe(fetchedCourses => {
-                   this.stateMachine = this.stk.createStateMachine(fetchedCourses);
-                   this.sections = this.stateMachine.next().value;
+                //    this.stateMachine = this.stk.createStateMachine(fetchedCourses);
+                //    this.sections = this.stateMachine.next().value;
+                    this.worker.postMessage({
+                        reset: true,
+                        courses: fetchedCourses
+                    })
                })
         /**
          * if the user goes on with the current set of course names, we just keep generating.
@@ -205,7 +213,10 @@ export class AppComponent implements OnInit {
          */
         unchanged.map(twoCourses => twoCourses[1])
                  .subscribe(courses => {
-                     this.sections = this.stateMachine.next().value;
+                    //  this.sections = this.stateMachine.next().value;
+                    this.worker.postMessage({
+                        next: true
+                    })
                  })
     }
 
