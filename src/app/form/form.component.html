@@ -48,7 +48,8 @@
                 ">ONE MORE CLASS!</button>
             </div>
             <div class="col-sm-6 col-lg-12">
-                <button (click)="generate()" type="button" 
+                <button (click)="generate()" type="button"
+                [disabled]="freezeGenerateButton"
                 class="btn btn-block formHeading pad-hack
                 ">GENERATE A SCHEDULE!</button>
             </div>

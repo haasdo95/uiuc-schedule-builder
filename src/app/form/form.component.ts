@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, EventEmitter, Output, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter, Input, Output, ElementRef } from '@angular/core';
 import { FormGroup, FormControl, FormArray } from '@angular/forms'
 import { CourseInfoService } from '../course-info.service'
 import { Class } from '../class-section'
@@ -21,6 +21,7 @@ import { primaryColors } from '../color-choice'
 export class FormComponent implements OnInit, OnDestroy {
 
     @Output() courses: EventEmitter<string[]> = new EventEmitter();
+    @Input() freezeGenerateButton: boolean;
 
     /**
      * The input array where users input their courses

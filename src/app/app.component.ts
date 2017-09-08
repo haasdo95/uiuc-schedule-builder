@@ -96,6 +96,8 @@ export class AppComponent implements OnInit {
      * given the way pairwise works
      */
     private dirty: boolean = false;
+
+    freezeGenerateButton: boolean = false;
     
     /**
      * Refactored to use Observable
@@ -173,9 +175,10 @@ export class AppComponent implements OnInit {
         this.courseNamesSubject = new Subject();
         this.courseNamesObservable = this.courseNamesSubject.asObservable();
 
+        // fired when the worker finished scheduling and sent back result
         this.worker.onmessage = (e) => {
-            console.log("SCHEDULED BY WORKER: ", e.data);
             this.sections = <Section[]> e.data;
+            this.freezeGenerateButton = false; // unfreeze generate button
         }
 
         /**
@@ -241,6 +244,7 @@ export class AppComponent implements OnInit {
      * @param courses an array of course names that the user just filled in FormComponent.
      */
     resetCourses(courses: string[]) {
+        this.freezeGenerateButton = true;
         if (!this.dirty) {
             // A padding made necessary because of the way pairwise works
             this.courseNamesSubject.next([]);
