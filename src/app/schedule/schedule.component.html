@@ -1,4 +1,24 @@
-<p-schedule [events]="events" [header]="false" defaultView="agendaWeek"
-[allDaySlot]="false" minTime="07:00:00" maxTime="22:00:00" [weekends]="false"
-[options]="options"
-[editable]="false"></p-schedule>
+<div [ngSwitch]="mode">
+    <!-- display tutorial -->
+    <div class="switch-container" *ngSwitchCase="ScheduleMode.TUTORIAL">
+        Hi I am tutorial
+    </div>
+    <!-- display calendar -->
+    <div *ngSwitchCase="ScheduleMode.CALENDAR">
+        <p-schedule [events]="events" [header]="false" defaultView="agendaWeek"
+        [allDaySlot]="false" minTime="07:00:00" maxTime="22:00:00" [weekends]="false"
+        [options]="options"
+        [editable]="false"></p-schedule>
+    </div>
+    <!-- display waiting -->
+    <div *ngSwitchCase="ScheduleMode.WAITING">
+        <img class="img-fluid" src="assets/push_calendar.png" alt="Bad Network Connection?...">
+    </div>
+    <!-- SOMETHING IS WRONG -->
+    <div *ngSwitchDefault>
+        SOMETHING IS WRONG
+    </div>
+</div>
+
+
+
