@@ -1,7 +1,28 @@
 <div [ngSwitch]="mode">
     <!-- display tutorial -->
     <div class="switch-container" *ngSwitchCase="ScheduleMode.TUTORIAL">
-        Hi I am tutorial
+        <h1>Hi I am tutorial!</h1>
+        <h3>
+            Put in course names and hit "GENERATE". That's pretty much it.
+        </h3>
+        <p>
+           1. If a generated schedule doesn't look good enough to you, you could 
+            keep hitting the "GENERATE A SCHEDULE" button to find a next fit.
+        </p>
+        <p>
+           2. A course placed higher in the form has higher priority. 
+            In case of an impossible schedule, we may drop the less prioritized courses
+            to give a suboptimal solution.
+        </p>
+        <p>
+           3. The course names you put in the input boxes must be properly formatted.
+            e.g. CS 225 works while CS225, cs225 and cs 225 don't.
+        </p>
+        <p>
+           4. Due to the exponential nature of the task at hand, the schedule could not
+            be generated in a reasonable amount of time if you put too many courses in.
+        </p>
+        Enjoy!
     </div>
     <!-- display calendar -->
     <div *ngSwitchCase="ScheduleMode.CALENDAR">
