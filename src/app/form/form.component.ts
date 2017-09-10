@@ -58,7 +58,7 @@ export class FormComponent implements OnInit, OnDestroy {
      */
     insertCourse(idx: number) {
         this.reinitSubscriptions();
-        this.classesFormArray.insert(idx, new FormControl());
+        this.classesFormArray.insert(idx + 1, new FormControl());
         this.handleAutocomplete();
     }
 

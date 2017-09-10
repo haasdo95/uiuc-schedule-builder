@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CourseInfoService } from './course-info.service'
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -13,10 +13,10 @@ import { Moment } from 'moment';
 
 import * as _ from "lodash";
 
-import { Class, Section, Meeting, Range } from './class-section'
-import { SchedulingToolkitService } from './scheduling-toolkit.service'
+import { Class, Section, Meeting, Range } from './class-section';
+import { ScheduleMode } from './schedule-mode';
 
-import { primaryColors, secondaryColors } from './color-choice'
+import { primaryColors, secondaryColors } from './color-choice';
 
 /**
  * this component is responsible for 
@@ -85,7 +85,7 @@ const weekDict = {
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [ CourseInfoService, SchedulingToolkitService ]
+  providers: [ CourseInfoService ]
 })
 export class AppComponent implements OnInit {
 
@@ -97,8 +97,17 @@ export class AppComponent implements OnInit {
      */
     private dirty: boolean = false;
 
+    /**
+     * used to freeze up "Generate" button in form component
+     */
     freezeGenerateButton: boolean = false;
     
+    /**
+     * used to switch mode in schedule-component
+     * display tutorial initially
+     */
+    scheduleMode: ScheduleMode = ScheduleMode.TUTORIAL;
+
     /**
      * Refactored to use Observable
      * 
@@ -130,7 +139,6 @@ export class AppComponent implements OnInit {
         this._sections = newValue;
         if (!newValue) {
             this.events = [];
-            console.log("WTF???");
             return;
         }
         this.events = [];
@@ -141,7 +149,6 @@ export class AppComponent implements OnInit {
             courseName2Color[courseName] = [primaryColors[count % primaryColors.length], secondaryColors[count % primaryColors.length]];
             count += 1;
         }
-
         for (const sec of newValue) {
             for (const wkDay of sec.meetings.date) {
                 const weekday = weekDict[wkDay] as string;
@@ -160,14 +167,13 @@ export class AppComponent implements OnInit {
 
     constructor(
         private cis: CourseInfoService,
-        private stk: SchedulingToolkitService
+        private ref: ChangeDetectorRef
     ) {}
 
     /**
-     * inspite of the fancy name, this is actually just a generator
+     * this is actually just a generator
      * which generates a new schedule every time the user hits the GENERATE button
      */
-    private stateMachine: IterableIterator<Section[]> = this.stk.createStateMachine([]);
     private worker: Worker = new MyWorker();
 
     ngOnInit() {
@@ -179,6 +185,13 @@ export class AppComponent implements OnInit {
         this.worker.onmessage = (e) => {
             this.sections = <Section[]> e.data;
             this.freezeGenerateButton = false; // unfreeze generate button
+            this.scheduleMode = ScheduleMode.CALENDAR; // let schedule component display
+            /**
+             * looks like the change detection mechanism won't detect change made in 
+             * a worker callback.
+             * doing that manually is embarrassingly awkward but it works anyways
+             */
+            this.ref.detectChanges();
         }
 
         /**
@@ -244,7 +257,8 @@ export class AppComponent implements OnInit {
      * @param courses an array of course names that the user just filled in FormComponent.
      */
     resetCourses(courses: string[]) {
-        this.freezeGenerateButton = true;
+        this.freezeGenerateButton = true; // freeze up "Generate" button
+        this.scheduleMode = ScheduleMode.WAITING; // let schedule component show the "waiting" message
         if (!this.dirty) {
             // A padding made necessary because of the way pairwise works
             this.courseNamesSubject.next([]);

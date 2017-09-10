@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Section } from '../class-section'
+import { Section } from '../class-section';
+import { ScheduleMode, ScheduleModeAware } from '../schedule-mode';
 
 /**
  * this component is only responsible for displaying the sections scheduled 
@@ -11,7 +12,10 @@ import { Section } from '../class-section'
   templateUrl: './schedule.component.html',
   styleUrls: ['./schedule.component.css']
 })
+@ScheduleModeAware
 export class ScheduleComponent implements OnInit {
+
+    @Input() mode: ScheduleMode;
 
     @Input() sections: Section[];
 
