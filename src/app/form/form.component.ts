@@ -28,7 +28,7 @@ export class FormComponent implements OnInit, OnDestroy {
     /**
      * trie structure for auto-complete
      */
-    private trie: Observable<Trie> = this.cis.getCourseList();
+    private trie: Promise<Trie> = this.cis.getCourseList();
 
     /**
      * The input array where users input their courses
@@ -112,7 +112,6 @@ export class FormComponent implements OnInit, OnDestroy {
             const fc = this.classesFormArray.controls[index] as FormControl;
             this.subscriptions.push(
                 fc.valueChanges
-                    .debounceTime(300)
                     .map(txt => txt.toUpperCase() as string)
                     .map(txt => {
                             const match = txt.match(/([A-Z]+)([0-9]+)/);
@@ -149,7 +148,7 @@ export class FormComponent implements OnInit, OnDestroy {
             this.hints[idx] = [];
         } else {
             this.trie
-                .subscribe(t => {
+                .then(t => {
                     this.hints[idx] = t.getWordsWithPrefix(prefix.toUpperCase()).slice(0, 10);
                 })
         }

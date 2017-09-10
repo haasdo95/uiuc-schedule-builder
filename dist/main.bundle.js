@@ -296,7 +296,7 @@ module.exports = module.exports.toString();
 /***/ "./src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"mb-3 navbar navbar-light blue lighten-2\">\n    <span class=\"navbar-brand\">Schedule Builder</span>\n</nav>\n\n<div class=\"container-fluid\">\n    <div class=\"row\">\n        <div class=\"col-lg-4\">\n            <app-form [freezeGenerateButton]=\"freezeGenerateButton\" (courses)=\"resetCourses($event)\"></app-form>\n        </div>\n        <div class=\"col-lg-8\">\n            <app-schedule [mode]=\"scheduleMode\" [events]=\"events\" [sections]=\"sections\"></app-schedule>\n        </div>\n    </div>\n</div>\n\n<footer class=\"page-footer blue center-on-small-only lighten-2\">\n    <div class=\"footer-copyright\">\n        <div class=\"container-fluid\">\n            © 2017 Copyright: <a href=\"#\"> xxx.com </a>\n        </div>\n    </div>\n</footer>\n"
+module.exports = "<nav class=\"mb-3 navbar navbar-light blue lighten-2\">\n    <span class=\"navbar-brand\">Schedule Builder</span>\n</nav>\n\n<div class=\"container-fluid\">\n    <div class=\"row\">\n        <div class=\"col-lg-4\">\n            <app-form [freezeGenerateButton]=\"freezeGenerateButton\" (courses)=\"resetCourses($event)\"></app-form>\n        </div>\n        <div class=\"col-lg-8\">\n            <app-schedule [mode]=\"scheduleMode\" [events]=\"events\" [sections]=\"sections\"></app-schedule>\n        </div>\n    </div>\n</div>\n\n<footer class=\"page-footer blue center-on-small-only lighten-2\">\n    <div class=\"footer-copyright\">\n        <div class=\"container-fluid\">\n            © 2017 Copyright: <a href=\"#\"> uiuc-scheduler </a>\n        </div>\n    </div>\n</footer>\n"
 
 /***/ }),
 
@@ -655,10 +655,10 @@ const secondaryColors = ["#E3F2FD", "#E8F5E9", "#F1F8E9", "#F9FBE7", "#FFFDE7", 
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__("./node_modules/@angular/http/@angular/http.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__trie__ = __webpack_require__("./src/app/trie.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__ = __webpack_require__("./node_modules/rxjs/Observable.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_observable_of__ = __webpack_require__("./node_modules/rxjs/add/observable/of.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_observable_of___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_observable_of__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_observable_of__ = __webpack_require__("./node_modules/rxjs/add/observable/of.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_observable_of___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_observable_of__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise__ = __webpack_require__("./node_modules/rxjs/add/operator/toPromise.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -693,10 +693,11 @@ let CourseInfoService = class CourseInfoService {
         if (!this.courseNames) {
             return this.http.get('api/courselist')
                 .map(res => res.json().list)
-                .map(courseNames => this.courseNames = new __WEBPACK_IMPORTED_MODULE_2__trie__["a" /* Trie */](courseNames));
+                .map(courseNames => this.courseNames = new __WEBPACK_IMPORTED_MODULE_2__trie__["a" /* Trie */](courseNames))
+                .toPromise();
         }
         else {
-            return __WEBPACK_IMPORTED_MODULE_3_rxjs_Observable__["Observable"].of(this.courseNames);
+            return Promise.resolve(this.courseNames);
         }
     }
     /**
@@ -781,6 +782,10 @@ let FormComponent = class FormComponent {
         this.cis = cis;
         this.courses = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
         /**
+         * trie structure for auto-complete
+         */
+        this.trie = this.cis.getCourseList();
+        /**
          * The input array where users input their courses
          */
         this.classesFormArray = new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["FormArray"]([
@@ -856,7 +861,6 @@ let FormComponent = class FormComponent {
         for (let index = 0; index < this.classesFormArray.controls.length; ++index) {
             const fc = this.classesFormArray.controls[index];
             this.subscriptions.push(fc.valueChanges
-                .debounceTime(300)
                 .map(txt => txt.toUpperCase())
                 .map(txt => {
                 const match = txt.match(/([A-Z]+)([0-9]+)/);
@@ -875,7 +879,6 @@ let FormComponent = class FormComponent {
      * @param idx
      */
     fillOut(hint, idx) {
-        console.log("FILLING OUT!!!");
         this.classesFormArray.at(idx).setValue(hint, { emitEvent: false });
         this.hints[idx] = []; // flushing too.
     }
@@ -886,13 +889,12 @@ let FormComponent = class FormComponent {
      * @param idx
      */
     showHints(prefix, idx) {
-        console.log("FOCUSED!!!");
         if (!prefix) {
             this.hints[idx] = [];
         }
         else {
-            this.cis.getCourseList()
-                .subscribe(t => {
+            this.trie
+                .then(t => {
                 this.hints[idx] = t.getWordsWithPrefix(prefix.toUpperCase()).slice(0, 10);
             });
         }
@@ -1004,7 +1006,7 @@ module.exports = module.exports.toString();
 /***/ "./src/app/schedule/schedule.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div [ngSwitch]=\"mode\">\n    <!-- display tutorial -->\n    <div class=\"switch-container\" *ngSwitchCase=\"ScheduleMode.TUTORIAL\">\n        <h1>Hi I am tutorial!</h1>\n        <h3>\n            Put in course names and hit \"GENERATE\". That's pretty much it.\n        </h3>\n        <p>\n           1. If a generated schedule doesn't look good enough to you, you could \n            keep hitting the \"GENERATE A SCHEDULE\" button to find a next fit.\n        </p>\n        <p>\n           2. A course placed higher in the form has higher priority. \n            In case of an impossible schedule, we may drop the less prioritized courses\n            to give a suboptimal solution.\n        </p>\n        <p>\n           3. The course names you put in the input boxes must be properly formatted.\n            e.g. CS 225 works while CS225, cs225 and cs 225 don't.\n        </p>\n        <p>\n           4. Due to the exponential nature of the task at hand, the schedule could not\n            be generated in a reasonable amount of time if you put too many courses in.\n        </p>\n        Enjoy!\n    </div>\n    <!-- display calendar -->\n    <div *ngSwitchCase=\"ScheduleMode.CALENDAR\">\n        <p-schedule [events]=\"events\" [header]=\"false\" defaultView=\"agendaWeek\"\n        [allDaySlot]=\"false\" minTime=\"07:00:00\" maxTime=\"22:00:00\" [weekends]=\"false\"\n        [options]=\"options\"\n        [editable]=\"false\"></p-schedule>\n    </div>\n    <!-- display waiting -->\n    <div *ngSwitchCase=\"ScheduleMode.WAITING\">\n        <img class=\"img-fluid\" src=\"assets/push_calendar.png\" alt=\"Bad Network Connection?...\">\n    </div>\n    <!-- SOMETHING IS WRONG -->\n    <div *ngSwitchDefault>\n        SOMETHING IS WRONG\n    </div>\n</div>\n\n\n\n"
+module.exports = "<div [ngSwitch]=\"mode\">\n    <!-- display tutorial -->\n    <div class=\"switch-container\" *ngSwitchCase=\"ScheduleMode.TUTORIAL\">\n        <h1>Hi, I am tutorial!</h1>\n        <h2>\n            Put in course names and hit \"GENERATE\". That's pretty much it.\n        </h2>\n        <p>\n           1. If a generated schedule doesn't look good enough to you, you could \n            keep hitting the \"GENERATE A SCHEDULE\" button to find a next fit.\n        </p>\n        <p>\n           2. A course placed higher in the form has higher priority. \n            In case of an impossible schedule, we may drop the less prioritized courses\n            to give a suboptimal solution.\n        </p>\n        <p>\n           3. The course names you put in the input boxes must be properly formatted.\n            e.g. CS 225 works while CS225, cs225 and cs 225 don't.\n        </p>\n        <p>\n           4. Due to the exponential nature of the task at hand, the schedule could not\n            be generated in a reasonable amount of time if you put too many courses in.\n        </p>\n        Enjoy!\n    </div>\n    <!-- display calendar -->\n    <div *ngSwitchCase=\"ScheduleMode.CALENDAR\">\n        <p-schedule [events]=\"events\" [header]=\"false\" defaultView=\"agendaWeek\"\n        [allDaySlot]=\"false\" minTime=\"07:00:00\" maxTime=\"22:00:00\" [weekends]=\"false\"\n        [options]=\"options\"\n        [editable]=\"false\"></p-schedule>\n    </div>\n    <!-- display waiting -->\n    <div *ngSwitchCase=\"ScheduleMode.WAITING\">\n        <img class=\"img-fluid\" src=\"assets/push_calendar.png\" alt=\"Bad Network Connection?...\">\n    </div>\n    <!-- SOMETHING IS WRONG -->\n    <div *ngSwitchDefault>\n        SOMETHING IS WRONG\n    </div>\n</div>\n\n\n\n"
 
 /***/ }),
 
