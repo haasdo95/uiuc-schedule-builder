@@ -2,7 +2,9 @@ import { Component, OnInit, OnDestroy, EventEmitter, Input, Output, ElementRef }
 import { FormGroup, FormControl, FormArray } from '@angular/forms'
 import { CourseInfoService } from '../course-info.service'
 import { Class } from '../class-section'
+import { Trie } from '../trie'
 import { Subscription } from 'rxjs/Subscription';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/debounceTime';
 
@@ -22,6 +24,11 @@ export class FormComponent implements OnInit, OnDestroy {
 
     @Output() courses: EventEmitter<string[]> = new EventEmitter();
     @Input() freezeGenerateButton: boolean;
+
+    /**
+     * trie structure for auto-complete
+     */
+    private trie: Promise<Trie> = this.cis.getCourseList();
 
     /**
      * The input array where users input their courses
@@ -105,7 +112,6 @@ export class FormComponent implements OnInit, OnDestroy {
             const fc = this.classesFormArray.controls[index] as FormControl;
             this.subscriptions.push(
                 fc.valueChanges
-                    .debounceTime(300)
                     .map(txt => txt.toUpperCase() as string)
                     .map(txt => {
                             const match = txt.match(/([A-Z]+)([0-9]+)/);
@@ -127,7 +133,6 @@ export class FormComponent implements OnInit, OnDestroy {
      * @param idx 
      */
     fillOut(hint: string, idx: number) {
-        console.log("FILLING OUT!!!");
         this.classesFormArray.at(idx).setValue(hint, {emitEvent: false});
         this.hints[idx] = []; // flushing too.
     }
@@ -139,12 +144,11 @@ export class FormComponent implements OnInit, OnDestroy {
      * @param idx 
      */
     showHints(prefix: string, idx: number) {
-        console.log("FOCUSED!!!");
         if (!prefix) {
             this.hints[idx] = [];
         } else {
-            this.cis.getCourseList()
-                .subscribe(t => {
+            this.trie
+                .then(t => {
                     this.hints[idx] = t.getWordsWithPrefix(prefix.toUpperCase()).slice(0, 10);
                 })
         }

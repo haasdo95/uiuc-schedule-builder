@@ -3,6 +3,7 @@ import { Http } from '@angular/http'
 import { Trie } from './trie'
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/toPromise';
 
 import { Class } from './class-section'
 
@@ -24,13 +25,14 @@ export class CourseInfoService {
      *       which are extremely expensive.
      *       switchMap looks promising here.
      */
-    getCourseList(): Observable<Trie> {
+    getCourseList(): Promise<Trie> {
         if (!this.courseNames) {
             return this.http.get('api/courselist')
                             .map(res => res.json().list as string[])
                             .map(courseNames => this.courseNames = new Trie(courseNames))
+                            .toPromise()
         } else {
-            return Observable.of(this.courseNames);
+            return Promise.resolve(this.courseNames);
         }
         
     }
