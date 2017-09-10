@@ -22,6 +22,6 @@ app.get('/', function (req, res) {
 app.use('/api', router);
 
 
-app.listen(8888, function () {
+app.listen(process.env.PORT || 8888, function () {
     console.log("listening on 8888");
 })
