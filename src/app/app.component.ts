@@ -18,6 +18,11 @@ import { ScheduleMode } from './schedule-mode';
 
 import { primaryColors, secondaryColors } from './color-choice';
 
+interface IPayload {
+    courses: string[],
+    filterInfo: number[]
+}
+
 /**
  * this component is responsible for 
  *      (1) taking course names from FormComponent
@@ -111,11 +116,11 @@ export class AppComponent implements OnInit {
     /**
      * Refactored to use Observable
      * 
-     * create a stream of string[], which contains an array of course names that
+     * create a stream of user input, which contains an array of course names that
      * the user selects.
      */
-    private courseNamesSubject: Subject<string[]>;
-    private courseNamesObservable: Observable<string[]>;
+    private payloadSubject: Subject<IPayload>;
+    private payloadObservable: Observable<IPayload>;
 
     /**
      * should contain the optimized schedule.
@@ -178,8 +183,8 @@ export class AppComponent implements OnInit {
 
     ngOnInit() {
         // initialize the stream of course names
-        this.courseNamesSubject = new Subject();
-        this.courseNamesObservable = this.courseNamesSubject.asObservable();
+        this.payloadSubject = new Subject();
+        this.payloadObservable = this.payloadSubject.asObservable();
 
         // fired when the worker finished scheduling and sent back result
         this.worker.onmessage = (e) => {
@@ -201,8 +206,8 @@ export class AppComponent implements OnInit {
          *      represents the case where the user has submitted a new set of course names.
          *      and the stream "unchanged" should be self-explanatory enough.
          */
-        const obs = this.courseNamesObservable.pairwise()
-                .partition(twoCourses => this.isChanged(twoCourses[0], twoCourses[1]));
+        const obs = this.payloadObservable.pairwise()
+                .partition(twoPayloads => this.isChanged(twoPayloads[0], twoPayloads[1]));
         const changed = obs[0];
         const unchanged = obs[1];
 
@@ -211,23 +216,28 @@ export class AppComponent implements OnInit {
          *      for the corresponding course info.
          * (2)  also, the state machine is reset.
          */
-        changed.map(twoCourses => twoCourses[1])
+        let filterInfo: number[];
+        changed.map(twoPayloads => twoPayloads[1])
+               .map(payload => {
+                   filterInfo = payload.filterInfo;
+                   return <string[]>payload.courses;
+               })
                .switchMap(courses =>
                     this.cis.getCoursesInfoByName(courses)
                )
                .subscribe(fetchedCourses => {
-                //    this.stateMachine = this.stk.createStateMachine(fetchedCourses);
-                //    this.sections = this.stateMachine.next().value;
+                   console.log("filter info: ", filterInfo);
                     this.worker.postMessage({
                         reset: true,
-                        courses: fetchedCourses
+                        courses: fetchedCourses,
+                        filterInfo: filterInfo
                     })
                })
         /**
          * if the user goes on with the current set of course names, we just keep generating.
          * no server communication needed here.
          */
-        unchanged.map(twoCourses => twoCourses[1])
+        unchanged.map(twoPayloads => twoPayloads[1])
                  .subscribe(courses => {
                     //  this.sections = this.stateMachine.next().value;
                     this.worker.postMessage({
@@ -241,12 +251,20 @@ export class AppComponent implements OnInit {
      * @param prev the array of course names that the user submitted previously
      * @param curr the array of course names that the user submitted this time
      */
-    private isChanged(prev: string[], curr: string[]): boolean {
+    private isChanged(prevPayload: IPayload, currPayload: IPayload): boolean {
+        if (!prevPayload) return true;
+        const prev = prevPayload.courses;
+        const curr = currPayload.courses;
         if (prev.length != curr.length) return true;
         for (let i = 0; i < prev.length; i++) {
             if (prev[i] != curr[i]) {
                 return true;
             }
+        }
+        const prevFilter = prevPayload.filterInfo;
+        const currFilter = currPayload.filterInfo;
+        if (prevFilter[0] != currFilter[0] || prevFilter[1] != currFilter[1]) {
+            return true
         }
         return false;
     }
@@ -254,19 +272,21 @@ export class AppComponent implements OnInit {
     /**
      * supposed to be the driver of the scheduling algorithm
      * fired when user hits "generate schedule"
-     * @param courses an array of course names that the user just filled in FormComponent.
+     * @param courses payload (an array of course names and filter info) 
+     *                  that the user just filled in FormComponent.
      */
-    resetCourses(courses: string[]) {
+    resetCourses(payload: any) {
         this.freezeGenerateButton = true; // freeze up "Generate" button
         this.scheduleMode = ScheduleMode.WAITING; // let schedule component show the "waiting" message
         if (!this.dirty) {
             // A padding made necessary because of the way pairwise works
-            this.courseNamesSubject.next([]);
+            this.payloadSubject.next(null);
             this.dirty = true;
         }
-        this.courseNamesSubject.next(courses);
+        
+        this.payloadSubject.next(payload);
     }
 
-
+    
 
 }

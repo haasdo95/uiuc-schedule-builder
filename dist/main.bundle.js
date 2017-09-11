@@ -257,7 +257,7 @@ webpackContext.id = "./node_modules/moment/locale recursive ^\\.\\/.*$";
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = function() {
-	return new Worker(__webpack_require__.p + "e3fbdc2512ca3188be60.worker.js");
+	return new Worker(__webpack_require__.p + "726ef356c46066f9270d.worker.js");
 };
 
 /***/ }),
@@ -476,8 +476,8 @@ let AppComponent = class AppComponent {
     }
     ngOnInit() {
         // initialize the stream of course names
-        this.courseNamesSubject = new __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__["Subject"]();
-        this.courseNamesObservable = this.courseNamesSubject.asObservable();
+        this.payloadSubject = new __WEBPACK_IMPORTED_MODULE_2_rxjs_Subject__["Subject"]();
+        this.payloadObservable = this.payloadSubject.asObservable();
         // fired when the worker finished scheduling and sent back result
         this.worker.onmessage = (e) => {
             this.sections = e.data;
@@ -497,8 +497,8 @@ let AppComponent = class AppComponent {
          *      represents the case where the user has submitted a new set of course names.
          *      and the stream "unchanged" should be self-explanatory enough.
          */
-        const obs = this.courseNamesObservable.pairwise()
-            .partition(twoCourses => this.isChanged(twoCourses[0], twoCourses[1]));
+        const obs = this.payloadObservable.pairwise()
+            .partition(twoPayloads => this.isChanged(twoPayloads[0], twoPayloads[1]));
         const changed = obs[0];
         const unchanged = obs[1];
         /**
@@ -506,21 +506,26 @@ let AppComponent = class AppComponent {
          *      for the corresponding course info.
          * (2)  also, the state machine is reset.
          */
-        changed.map(twoCourses => twoCourses[1])
+        let filterInfo;
+        changed.map(twoPayloads => twoPayloads[1])
+            .map(payload => {
+            filterInfo = payload.filterInfo;
+            return payload.courses;
+        })
             .switchMap(courses => this.cis.getCoursesInfoByName(courses))
             .subscribe(fetchedCourses => {
-            //    this.stateMachine = this.stk.createStateMachine(fetchedCourses);
-            //    this.sections = this.stateMachine.next().value;
+            console.log("filter info: ", filterInfo);
             this.worker.postMessage({
                 reset: true,
-                courses: fetchedCourses
+                courses: fetchedCourses,
+                filterInfo: filterInfo
             });
         });
         /**
          * if the user goes on with the current set of course names, we just keep generating.
          * no server communication needed here.
          */
-        unchanged.map(twoCourses => twoCourses[1])
+        unchanged.map(twoPayloads => twoPayloads[1])
             .subscribe(courses => {
             //  this.sections = this.stateMachine.next().value;
             this.worker.postMessage({
@@ -533,7 +538,11 @@ let AppComponent = class AppComponent {
      * @param prev the array of course names that the user submitted previously
      * @param curr the array of course names that the user submitted this time
      */
-    isChanged(prev, curr) {
+    isChanged(prevPayload, currPayload) {
+        if (!prevPayload)
+            return true;
+        const prev = prevPayload.courses;
+        const curr = currPayload.courses;
         if (prev.length != curr.length)
             return true;
         for (let i = 0; i < prev.length; i++) {
@@ -541,22 +550,28 @@ let AppComponent = class AppComponent {
                 return true;
             }
         }
+        const prevFilter = prevPayload.filterInfo;
+        const currFilter = currPayload.filterInfo;
+        if (prevFilter[0] != currFilter[0] || prevFilter[1] != currFilter[1]) {
+            return true;
+        }
         return false;
     }
     /**
      * supposed to be the driver of the scheduling algorithm
      * fired when user hits "generate schedule"
-     * @param courses an array of course names that the user just filled in FormComponent.
+     * @param courses payload (an array of course names and filter info)
+     *                  that the user just filled in FormComponent.
      */
-    resetCourses(courses) {
+    resetCourses(payload) {
         this.freezeGenerateButton = true; // freeze up "Generate" button
         this.scheduleMode = __WEBPACK_IMPORTED_MODULE_9__schedule_mode__["a" /* ScheduleMode */].WAITING; // let schedule component show the "waiting" message
         if (!this.dirty) {
             // A padding made necessary because of the way pairwise works
-            this.courseNamesSubject.next([]);
+            this.payloadSubject.next(null);
             this.dirty = true;
         }
-        this.courseNamesSubject.next(courses);
+        this.payloadSubject.next(payload);
     }
 };
 AppComponent = __decorate([
@@ -750,7 +765,7 @@ module.exports = module.exports.toString();
 /***/ "./src/app/form/form.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<form style=\"margin-bottom: 5em\" [formGroup]=\"formModel\">\n    <div class=\"form-group\">\n        <div class=\"serious-margin-hack\">\n            <ul class=\"\" formArrayName=\"classes\">\n                <li class=\"mb-3\" *ngFor=\"let c of formModel.controls['classes'].controls; let i=index\"> \n                    <div [style.border-color]=\"colorArray[i % colorArray.length]\" class=\"input-group\">\n                        <span [style.color]=\"colorArray[i % colorArray.length]\" class=\"input-group-btn\">\n                            <button (click)=\"insertCourse(i)\"\n                                class=\"insertButton btn my-0 embedButton pad-hack\">\n                                <i class=\"fa fa-plus\"></i>\n                            </button>\n                        </span>\n                        <input autocomplete=\"off\" [style.color]=\"colorArray[i % colorArray.length]\"\n                         (keydown.tab)=\"fillWithFirst(c, i, $event)\" (keydown.enter)=\"fillWithFirst(c, i, $event)\"\n                            placeholder=\"e.g. CS 225\"\n                            (focus)=\"showHints(c.value, i)\" (blur)=\"hideHints($event, i)\" type=\"text\" id=\"_{{i}}\"\n                            name=\"_{{i}}\" class=\"form-control d-inline pad-hack\" [formControlName]=\"i\">\n                        \n                        <span [style.color]=\"colorArray[i % colorArray.length]\" class=\"input-group-btn\">\n                            <button (click)=\"oneMoreOrOneLess(i)\"\n                                class=\"deleteButton btn my-0 embedButton pad-hack\">\n                                <i class=\"fa fa-times\"></i>\n                            </button>\n                        </span>\n                    </div>\n                    <!-- auto-complete -->\n                    <div class=\"container ac-container\">\n                        <div class=\"row ac-row\">\n                            <div *ngFor=\"let hint of hints[i]; let j = index\" class=\"col-xs-2\">\n                                <button (click)=\"fillOut(hint, i)\" type=\"button\" \n                                    [class.btn-outline-info]=\"j != 0\" [class.btn-info]=\"j == 0\"\n                                    class=\"dontBlur btn btn-sm\">\n                                    {{hint}}\n                                </button>\n                            </div>\n                        </div>\n                    </div>\n                    <!-- end of auto-complete -->\n                </li>\n            </ul>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6 col-lg-12 mb-3\">\n                <button (click)=\"oneMoreOrOneLess(-1)\" type=\"button\" \n                class=\"btn btn-block formHeading pad-hack\n                \">ONE MORE CLASS!</button>\n            </div>\n            <div class=\"col-sm-6 col-lg-12\">\n                <button (click)=\"generate()\" type=\"button\"\n                [disabled]=\"freezeGenerateButton\"\n                class=\"btn btn-block formHeading pad-hack\n                \">GENERATE A SCHEDULE!</button>\n            </div>\n        </div>\n    </div>\n</form>\n<!-- morning/evening classes filter -->\n<div class=\"pl-5 pr-5\">\n    <nouislider [config]=\"filterRangeConfig\" [(ngModel)]=\"filterRange\"></nouislider>\n</div>"
+module.exports = "<form style=\"margin-bottom: 5em\" [formGroup]=\"formModel\">\n    <div class=\"form-group\">\n        <div class=\"serious-margin-hack\">\n            <ul class=\"\" formArrayName=\"classes\">\n                <li class=\"mb-3\" *ngFor=\"let c of formModel.controls['classes'].controls; let i=index\"> \n                    <div [style.border-color]=\"colorArray[i % colorArray.length]\" class=\"input-group\">\n                        <span [style.color]=\"colorArray[i % colorArray.length]\" class=\"input-group-btn\">\n                            <button (click)=\"insertCourse(i)\"\n                                class=\"insertButton btn my-0 embedButton pad-hack\">\n                                <i class=\"fa fa-plus\"></i>\n                            </button>\n                        </span>\n                        <input autocomplete=\"off\" [style.color]=\"colorArray[i % colorArray.length]\"\n                         (keydown.tab)=\"fillWithFirst(c, i, $event)\" (keydown.enter)=\"fillWithFirst(c, i, $event)\"\n                            placeholder=\"e.g. CS 225\"\n                            (focus)=\"showHints(c.value, i)\" (blur)=\"hideHints($event, i)\" type=\"text\" id=\"_{{i}}\"\n                            name=\"_{{i}}\" class=\"form-control d-inline pad-hack\" [formControlName]=\"i\">\n                        \n                        <span [style.color]=\"colorArray[i % colorArray.length]\" class=\"input-group-btn\">\n                            <button (click)=\"oneMoreOrOneLess(i)\"\n                                class=\"deleteButton btn my-0 embedButton pad-hack\">\n                                <i class=\"fa fa-times\"></i>\n                            </button>\n                        </span>\n                    </div>\n                    <!-- auto-complete -->\n                    <div class=\"container ac-container\">\n                        <div class=\"row ac-row\">\n                            <div *ngFor=\"let hint of hints[i]; let j = index\" class=\"col-xs-2\">\n                                <button (click)=\"fillOut(hint, i)\" type=\"button\" \n                                    [class.btn-outline-info]=\"j != 0\" [class.btn-info]=\"j == 0\"\n                                    class=\"dontBlur btn btn-sm\">\n                                    {{hint}}\n                                </button>\n                            </div>\n                        </div>\n                    </div>\n                    <!-- end of auto-complete -->\n                </li>\n            </ul>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6 col-lg-12 mb-3\">\n                <button (click)=\"oneMoreOrOneLess(-1)\" type=\"button\" \n                class=\"btn btn-block formHeading pad-hack\n                \">ONE MORE CLASS!</button>\n            </div>\n            <div class=\"col-sm-6 col-lg-12\">\n                <button (click)=\"generate()\" type=\"button\"\n                [disabled]=\"freezeGenerateButton\"\n                class=\"btn btn-block formHeading pad-hack\n                \">GENERATE A SCHEDULE!</button>\n            </div>\n        </div>\n    </div>\n</form>\n<!-- morning/evening classes filter -->\n<div class=\"pl-5 pr-5\">\n    <nouislider [config]=\"filterRangeConfig\" [(ngModel)]=\"filterRange\" \n    ></nouislider>\n</div>"
 
 /***/ }),
 
@@ -789,7 +804,7 @@ let FormComponent = class FormComponent {
     constructor(cis) {
         this.cis = cis;
         this.filterRange = [0, 7];
-        this.tooltipMap = ["MORNING OK", "> 9am", "> 10am", "< 5pm", "< 6pm", "< 7pm", "< 8pm", "EVENING OK"];
+        this.tooltipMap = ["MORNING OK", ">09 am", ">10 am", "<05 pm", "<06 pm", "<07 pm", "<08 pm", "EVENING OK"];
         this.filterRangeConfig = {
             connect: true,
             start: [0, 7],
@@ -873,7 +888,10 @@ let FormComponent = class FormComponent {
                 courses.push(ctrl.value);
             }
         }
-        this.courses.emit(courses);
+        this.courses.emit({
+            courses: courses,
+            filterInfo: this.filterRange
+        });
     }
     /**
      * Method to unsubscribe all.
