@@ -1,28 +1,66 @@
 <div [ngSwitch]="mode">
     <!-- display tutorial -->
     <div class="switch-container" *ngSwitchCase="ScheduleMode.TUTORIAL">
-        <h1>Hi, I am tutorial!</h1>
-        <h2>
-            Put in course names and hit "GENERATE". That's pretty much it.
-        </h2>
-        <p>
-           1. If a generated schedule doesn't look good enough to you, you could 
-            keep hitting the "GENERATE A SCHEDULE" button to find a next fit.
-        </p>
-        <p>
-           2. A course placed higher in the form has higher priority. 
-            In case of an impossible schedule, we may drop the less prioritized courses
-            to give a suboptimal solution.
-        </p>
-        <p>
-           3. The course names you put in the input boxes must be properly formatted.
-            e.g. CS 225 works while CS225, cs225 and cs 225 don't.
-        </p>
-        <p>
-           4. Due to the exponential nature of the task at hand, the schedule could not
-            be generated in a reasonable amount of time if you put too many courses in.
-        </p>
-        Enjoy!
+        <div class="row theader">
+            <div>
+                <span class="theader-left">FILL OUT</span> 
+                <span class="theader-right">COURSE NAMES,</span>
+            </div>
+            <div>
+                <span class="theader-left">HIT</span> 
+                <span class="theader-right">GENERATE,</span>
+            </div>
+            <div>
+                <span class="theader-left">BRING HOME</span> 
+                <span class="theader-right">A NEW SCHEDULE.</span>
+            </div>
+        </div>
+        <div class="tcontent">
+            <div class="row">
+                <div class="col-sm">
+                    <div class="row tcontent-head">
+                        MORE OPTIONS AWAIT.
+                    </div>
+                    <div class="row tcontent-body">
+                        If a generated schedule doesn't look good enough to you, you could 
+                        keep hitting the "GENERATE A SCHEDULE" button to find a next fit.
+                    </div>
+                </div>
+                <div class="col-sm">
+                    <div class="row tcontent-head">
+                        ORDER MATTERS.
+                    </div>
+                    <div class="row tcontent-body">
+                        A course placed higher in the form has higher priority. 
+                        In case of an impossible schedule, we may drop the less prioritized courses
+                        to give a suboptimal solution.
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                    <div class="col-sm">
+                        <div class="row tcontent-head">
+                             FORMAT IS IMPORTANT.
+                        </div>
+                        <div class="row tcontent-body">
+                            The course names you put in the input boxes must be properly formatted.
+                            e.g. CS 225 works while CS225, cs225 and cs 225 don't.
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="row tcontent-head force-center">
+                            BE PATIENT.
+                        </div>
+                        <div class="row tcontent-body">
+                            Due to the exponential nature of the task at hand, the schedule could not
+                            be generated in a reasonable amount of time if you put too many courses in.
+                        </div>
+                    </div>
+                </div>
+            
+        </div>
+        
     </div>
     <!-- display calendar -->
     <div *ngSwitchCase="ScheduleMode.CALENDAR">
