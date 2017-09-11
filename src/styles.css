@@ -1,11 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
-.fc-today {
-    background: #FFF !important;
-    border: none !important;
-    border-top: 1px solid #ddd !important;
-    font-weight: bold;
-}
-
+/* =====Global Property===== */
 /* This is required for a sticky footer */
 html {
     height: 100%;
@@ -26,6 +19,15 @@ html {
 
 i {
     -webkit-text-stroke: .1em white;
+}
+
+/* =====Full-Calendar Property =====*/
+/* You can add global styles to this file, and also import other style files */
+.fc-today {
+    background: #FFF !important;
+    border: none !important;
+    border-top: 1px solid #ddd !important;
+    font-weight: bold;
 }
 
 .fc * {
@@ -74,7 +76,7 @@ i {
     border-top-width: .15em !important;
 }
 
-/* Tutorial formatting */
+/* =====Tutorial Property=====*/
 .theader {
     text-align: center;
     display: block;
@@ -115,7 +117,7 @@ i {
     padding-bottom: 1.5em;
 }
 
-/* Main body padding */
+/* =====Body Property===== */
 body{ /* This is erquired for a sticky footer */
     position: relative;
     min-height: 100%;
@@ -132,7 +134,7 @@ body{ /* This is erquired for a sticky footer */
     padding-right: 1%;
 }
 
-/* Header property */
+/* =====Header property===== */
 .header {
     margin: 0;
     height: auto;
@@ -164,7 +166,7 @@ body{ /* This is erquired for a sticky footer */
     padding-bottom: 0;
 }
 
-/* Footer property */
+/* =====Footer Property===== */
 footer { /* This is required for a sticky footer */
     height: 5em;
 } 
@@ -173,7 +175,7 @@ footer { /* This is required for a sticky footer */
     height: auto;
     padding-left: 3%;
     padding-right: 3%;
-    padding-bottom: 2em;
+    padding-bottom: 1em;
     position: absolute;
     right: 0;
     bottom: 0;

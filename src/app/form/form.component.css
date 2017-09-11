@@ -3,7 +3,7 @@ ul {
     padding-left:0px;
 }
 
-/* Form body margin */
+/* =====Form Property===== */
 .form-group {
     margin-bottom: 2em;
 }
@@ -22,6 +22,22 @@ input:focus {
     border-bottom: .1em solid;
 }
 
+/* Change Placeholder hint text color */
+::-webkit-input-placeholder { /* Chrome Safari*/
+    color: #9e9e9e;
+}
+:-ms-input-placeholder { /* IE 10+ */
+    color: #9e9e9e;
+}
+::-moz-placeholder { /* Firefox 19+ */
+    color: #9e9e9e;
+    opacity: 1;
+}
+:-moz-placeholder { /* Firefox 4 - 18 */
+    color: #9e9e9e;
+    opacity: 1;
+}
+
 .serious-margin-hack {
     margin-bottom: 2em;
 }
@@ -32,6 +48,7 @@ input:focus {
     font-size: 14pt;
 }
 
+/* =====Button Property===== */
 .embedButton {
     background-color: transparent;
     color: inherit;
@@ -56,6 +73,8 @@ input:focus {
     border-top-left-radius: 999em;
     border-bottom-left-radius: 999em;
     border-right-width: 0;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
 }
 
 .insertButton:hover {
@@ -68,8 +87,8 @@ input:focus {
     border-top-right-radius: 999em;
     border-bottom-right-radius: 999em;
     border-left-width: 0;
-    padding-top: 0.1em;
-    padding-bottom: 0.3em;
+    padding-top: 0.15em;
+    padding-bottom: 0.25em;
 }
 
 .deleteButton:hover {
@@ -78,7 +97,7 @@ input:focus {
     border-left-width: 0;
 }
 
-/* Property for 'One More' and 'Generate' button */
+/* =====Property for 'One More' and 'Generate' button===== */
 .formHeading {
     background-color: transparent;
     color: #212121;
@@ -91,29 +110,19 @@ input:focus {
     color: white;
 }
 
+.formHeading:disabled {
+    background-color: transparent;
+    color: #BDBDBD;
+    border-color: #BDBDBD;
+}
+
 /* Disable highlight blue box after click */
 .formHeading:focus {
     outline: none !important;
     box-shadow: none !important;
 }
 
-/* Change Placeholder hint text color */
-::-webkit-input-placeholder { /* Chrome Safari*/
-    color: #9e9e9e;
-}
-:-ms-input-placeholder { /* IE 10+ */
-    color: #9e9e9e;
-}
-::-moz-placeholder { /* Firefox 19+ */
-    color: #9e9e9e;
-    opacity: 1;
-}
-:-moz-placeholder { /* Firefox 4 - 18 */
-    color: #9e9e9e;
-    opacity: 1;
-}
-
-/* Auto-complete formatting */
+/* =====Auto-complete Property===== */
 /* I really don't know how to change this color dynamically */
 .btn-info {
     background-color: #9E9E9E;
