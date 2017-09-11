@@ -10,7 +10,7 @@
                                 <i class="fa fa-plus"></i>
                             </button>
                         </span>
-                        <input [style.color]="colorArray[i % colorArray.length]"
+                        <input autocomplete="off" [style.color]="colorArray[i % colorArray.length]"
                          (keydown.tab)="fillWithFirst(c, i, $event)" (keydown.enter)="fillWithFirst(c, i, $event)"
                             placeholder="e.g. CS 225"
                             (focus)="showHints(c.value, i)" (blur)="hideHints($event, i)" type="text" id="_{{i}}"
@@ -24,8 +24,8 @@
                         </span>
                     </div>
                     <!-- auto-complete -->
-                    <div class="container">
-                        <div class="row pl-5">
+                    <div class="container ac-container">
+                        <div class="row ac-row">
                             <div *ngFor="let hint of hints[i]; let j = index" class="col-xs-2">
                                 <button (click)="fillOut(hint, i)" type="button" 
                                     [class.btn-outline-info]="j != 0" [class.btn-info]="j == 0"

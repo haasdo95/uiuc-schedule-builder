@@ -23,7 +23,7 @@ i {
 }
 
 .fc * {
-    border-color: #9E9E9E;
+    border-color: #BDBDBD;
     border-width: .15em 0 .15em 0 !important;
 }
 
@@ -31,15 +31,15 @@ i {
 .ui-widget-header {
     background: none !important;
     vertical-align: middle !important;
-    border-color: #9E9E9E;
+    border-color: #BDBDBD;
     border-bottom-width: 0 !important;
     border-top-width: 0 !important;
-    color: #9E9E9E !important;
+    color: #BDBDBD !important;
 }
 
 /* Color of time */
 .ui-widget-content {
-    color: #9E9E9E !important;
+    color: #BDBDBD !important;
 }
 
 /* Row Height */
@@ -107,4 +107,48 @@ i {
     padding-left: 10%;
     padding-right: 10%;
     padding-bottom: 1.5em;
+}
+
+/* Main body padding */
+.body-padding {
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+.form-padding,
+.schedule-padding {
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+/* Header property */
+.header {
+    margin: 0;
+    height: auto;
+}
+
+.header-icon {
+    width: 2.5em;
+    height: 2.5em;
+    padding-left: 0em;
+    vertical-align: center;
+    color: #9E9E9E;
+}
+
+.header-brand {
+    font-size: 1.75em;
+    font-weight: 400 !important;
+    padding-top: .05em;
+    padding-left: .5em;
+    vertical-align: middle;
+    color: #212121;
+}
+
+.navbar {
+    height: auto;
+    margin-bottom: 2em !important;
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-top: 2em;
+    padding-bottom: 0;
 }

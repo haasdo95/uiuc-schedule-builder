@@ -3,6 +3,11 @@ ul {
     padding-left:0px;
 }
 
+/* Form body margin */
+.form-group {
+    margin-bottom: 2em;
+}
+
 input {
     border: .1em solid;
     border-color: inherit;
@@ -40,6 +45,11 @@ input:focus {
 
 .embedButton:hover>i {
     -webkit-text-stroke: 0px white !important;
+}
+
+.embedButton:focus {
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 .insertButton {
@@ -101,4 +111,51 @@ input:focus {
 :-moz-placeholder { /* Firefox 4 - 18 */
     color: #9e9e9e;
     opacity: 1;
+}
+
+/* Auto-complete formatting */
+/* I really don't know how to change this color dynamically */
+.btn-info {
+    background-color: #9E9E9E;
+}
+
+.btn-outline-info {
+    color: #9E9E9E;
+}
+
+.btn-info,
+.btn-outline-info {
+    border-color: #9E9E9E; 
+    border-radius: 0em;
+    border-width: 0;
+    width: 4.5em !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    text-align: center;
+}
+
+.btn-outline-info:hover,
+.btn-info:hover {
+    background: #616161;
+    border-color: #616161;
+    border-width: 0;
+    color: white;
+} 
+
+.btn-outline-info:focus,
+.btn-info:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.ac-container {
+    padding: 0;
+    margin-left: 3.5em;
+    margin-right: 3.5em;
+    width: 80%;
+    display: block;
+}
+
+.ac-row {
+    margin: 0;
 }

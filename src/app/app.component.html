@@ -1,13 +1,17 @@
 <nav class="mb-3 navbar navbar-light blue lighten-2">
-    <span class="navbar-brand">Schedule Builder</span>
+    <div class="row header">
+        <div class="header-icon"><img class="img-fluid" src="assets/icon.svg"></div>
+        <div class="header-brand">Schedule Builder</div>
+        <!-- <span class="navbar-brand"></span> -->
+    </div>
 </nav>
 
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-4">
+    <div class="row body-padding">
+        <div class="col-lg-4 form-padding">
             <app-form [freezeGenerateButton]="freezeGenerateButton" (courses)="resetCourses($event)"></app-form>
         </div>
-        <div class="col-lg-8">
+        <div class="col-lg-8 schedule-padding">
             <app-schedule [mode]="scheduleMode" [events]="events" [sections]="sections"></app-schedule>
         </div>
     </div>
