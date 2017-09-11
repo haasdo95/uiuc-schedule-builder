@@ -9,6 +9,26 @@ export class SchedulingWorker {
 
     constructor() { }
 
+    private rangeFilter: (section: Section)=>boolean;
+    
+    private createFilter(morning: any, evening: any): (section: Section)=>boolean {
+        let f1: Function;
+        let f2: Function;
+        if (morning == 0 || morning == "MORNING OK")
+            f1 = (sec) => true;
+        else {
+            const morningTime = moment(morning.slice(1), "hh a");
+            f1 = (sec: Section) => sec.meetings.range.from > morningTime;
+        }
+        if (evening == 7 || evening == "EVENING OK")
+            f2 = (sec) => true;
+        else {
+            const eveningTime = moment(evening.slice(1), "hh a");
+            f2 = (sec: Section) => sec.meetings.range.to < eveningTime;
+        }
+        return (section: Section) => f1(section) && f2 (section);
+    }
+
     /**
      * return true if two ranges overlap.
      * @param r1 
@@ -117,7 +137,11 @@ export class SchedulingWorker {
      * e.g. returns many (LEC, LBD) tuples
      * @param section
      */
-    createBigSectionGenerator(bigSectionAlreadyTyped: Section[][]): IterableIterator<Section[]> {
+    createBigSectionGenerator(bigSectionAlreadyTypedPre: Section[][]): IterableIterator<Section[]> {
+        // filter by additional criteria
+        const bigSectionAlreadyTyped = bigSectionAlreadyTypedPre.map(sectionsOfType => {
+            return sectionsOfType.filter(this.rangeFilter);
+        })
         const gen = function* () {
             const doCartesian = (function * (i, prod: Section[]) {
                 if (i == bigSectionAlreadyTyped.length) {
@@ -241,11 +265,11 @@ export class SchedulingWorker {
 
     /**
      * the true business of the WHOLE project
+     * will create filter as well
      * @param courses
      */
-    createStateMachine(courses: Class[]): IterableIterator<Section[]> {
-        console.log("COURSES: ", courses.map(c => c.name));
-        
+    createStateMachine(courses: Class[], filterInfo: number[]): IterableIterator<Section[]> {
+        this.rangeFilter = this.createFilter(filterInfo[0], filterInfo[1]);
         var gen = function * () {
             while (courses.length) {
                 // TODO: Notify the user before showing suboptimal scheduling
@@ -261,14 +285,15 @@ export class SchedulingWorker {
 }
 
 var service = new SchedulingWorker();
-var stateMachine = service.createStateMachine([]);
+var stateMachine = service.createStateMachine([], [0, 7]);
 
 self.onmessage = (e) => {
     const payload = e.data;
     if (!payload) return;
     if (payload.reset) {
         const courses = <Class[]> payload.courses;
-        stateMachine = service.createStateMachine(courses);
+        const filterInfo = <number[]> payload.filterInfo;
+        stateMachine = service.createStateMachine(courses, filterInfo);
     }
     // workaround
     const scheduledSections = stateMachine.next().value;

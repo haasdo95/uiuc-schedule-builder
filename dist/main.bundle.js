@@ -257,7 +257,7 @@ webpackContext.id = "./node_modules/moment/locale recursive ^\\.\\/.*$";
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = function() {
-	return new Worker(__webpack_require__.p + "e3fbdc2512ca3188be60.worker.js");
+	return new Worker(__webpack_require__.p + "b8763c802a838c05326f.worker.js");
 };
 
 /***/ }),
@@ -506,24 +506,19 @@ let AppComponent = class AppComponent {
          *      for the corresponding course info.
          * (2)  also, the state machine is reset.
          */
+        let filterInfo;
         changed.map(twoPayloads => twoPayloads[1])
             .map(payload => {
-            this.rangeFilter = this.createFilter(payload.filterInfo[0], payload.filterInfo[1]);
+            filterInfo = payload.filterInfo;
             return payload.courses;
         })
             .switchMap(courses => this.cis.getCoursesInfoByName(courses))
-            .map(courses => {
-            courses.forEach(course => {
-                course.sections = course.sections.filter(this.rangeFilter);
-            });
-            return courses;
-        })
             .subscribe(fetchedCourses => {
-            //    this.stateMachine = this.stk.createStateMachine(fetchedCourses);
-            //    this.sections = this.stateMachine.next().value;
+            console.log("filter info: ", filterInfo);
             this.worker.postMessage({
                 reset: true,
-                courses: fetchedCourses
+                courses: fetchedCourses,
+                filterInfo: filterInfo
             });
         });
         /**
@@ -577,23 +572,6 @@ let AppComponent = class AppComponent {
             this.dirty = true;
         }
         this.payloadSubject.next(payload);
-    }
-    createFilter(morning, evening) {
-        let f1;
-        let f2;
-        if (morning == 0 || morning == "MORNING OK")
-            f1 = (sec) => true;
-        else {
-            const morningTime = __WEBPACK_IMPORTED_MODULE_7_moment__(morning.slice(1), "hh a");
-            f1 = (sec) => sec.meetings.range.from > morningTime;
-        }
-        if (evening == 7 || evening == "EVENING OK")
-            f2 = (sec) => true;
-        else {
-            const eveningTime = __WEBPACK_IMPORTED_MODULE_7_moment__(evening.slice(1), "hh a");
-            f2 = (sec) => sec.meetings.range.to < eveningTime;
-        }
-        return (section) => f1(section) && f2(section);
     }
 };
 AppComponent = __decorate([

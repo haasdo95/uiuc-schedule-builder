@@ -216,26 +216,21 @@ export class AppComponent implements OnInit {
          *      for the corresponding course info.
          * (2)  also, the state machine is reset.
          */
+        let filterInfo: number[];
         changed.map(twoPayloads => twoPayloads[1])
                .map(payload => {
-                   this.rangeFilter = this.createFilter(payload.filterInfo[0], payload.filterInfo[1]);
+                   filterInfo = payload.filterInfo;
                    return <string[]>payload.courses;
                })
                .switchMap(courses =>
                     this.cis.getCoursesInfoByName(courses)
                )
-               .map(courses => { // prune by morning and evening
-                   courses.forEach(course => {
-                       course.sections = course.sections.filter(this.rangeFilter);
-                   })
-                   return courses;
-               })
                .subscribe(fetchedCourses => {
-                //    this.stateMachine = this.stk.createStateMachine(fetchedCourses);
-                //    this.sections = this.stateMachine.next().value;
+                   console.log("filter info: ", filterInfo);
                     this.worker.postMessage({
                         reset: true,
-                        courses: fetchedCourses
+                        courses: fetchedCourses,
+                        filterInfo: filterInfo
                     })
                })
         /**
@@ -292,24 +287,6 @@ export class AppComponent implements OnInit {
         this.payloadSubject.next(payload);
     }
 
-    private rangeFilter: (section: Section)=>boolean;
-
-    private createFilter(morning: any, evening: any): (section: Section)=>boolean {
-        let f1: Function;
-        let f2: Function;
-        if (morning == 0 || morning == "MORNING OK")
-            f1 = (sec) => true;
-        else {
-            const morningTime = moment(morning.slice(1), "hh a");
-            f1 = (sec: Section) => sec.meetings.range.from > morningTime;
-        }
-        if (evening == 7 || evening == "EVENING OK")
-            f2 = (sec) => true;
-        else {
-            const eveningTime = moment(evening.slice(1), "hh a");
-            f2 = (sec: Section) => sec.meetings.range.to < eveningTime;
-        }
-        return (section: Section) => f1(section) && f2 (section);
-    }
+    
 
 }
