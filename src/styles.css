@@ -6,6 +6,12 @@
     font-weight: bold;
 }
 
+/* This is required for a sticky footer */
+html {
+    height: 100%;
+    box-sizing: border-box;
+}
+
 @import "~nouislider/distribute/nouislider.min.css";
 
 /* this may screw up font-awesome icons for some reason without the "not" */
@@ -110,6 +116,11 @@ i {
 }
 
 /* Main body padding */
+body{ /* This is erquired for a sticky footer */
+    position: relative;
+    min-height: 100%;
+}
+
 .body-padding {
     padding-left: 2%;
     padding-right: 2%;
@@ -151,4 +162,29 @@ i {
     padding-right: 3%;
     padding-top: 2em;
     padding-bottom: 0;
+}
+
+/* Footer property */
+footer { /* This is required for a sticky footer */
+    height: 5em;
+} 
+
+.footer-content {
+    height: auto;
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-bottom: 2em;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: block;
+    text-align: center;
+}
+
+.footer-content a,
+.footer-content {
+    color: #BDBDBD;
+    font-weight: 400 !important;
+    font-size: 1em;
 }

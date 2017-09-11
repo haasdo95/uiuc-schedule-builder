@@ -2,11 +2,10 @@
     <div class="row header">
         <div class="header-icon"><img class="img-fluid" src="assets/icon.svg"></div>
         <div class="header-brand">Schedule Builder</div>
-        <!-- <span class="navbar-brand"></span> -->
     </div>
 </nav>
 
-<div class="container-fluid">
+<div class="container-fluid body">
     <div class="row body-padding">
         <div class="col-lg-4 form-padding">
             <app-form [freezeGenerateButton]="freezeGenerateButton" (courses)="resetCourses($event)"></app-form>
@@ -17,10 +16,10 @@
     </div>
 </div>
 
-<footer class="page-footer blue center-on-small-only lighten-2">
+<footer class="page-footer footer blue center-on-small-only lighten-2">
     <div class="footer-copyright">
-        <div class="container-fluid">
-            © 2017 Copyright: <a href="#"> uiuc-scheduler </a>
+        <div class="container-fluid footer-content">
+            © 2017 Copyright: <a href="#"> UIUC-SCHEDULER </a>
         </div>
     </div>
 </footer>
