@@ -22,8 +22,8 @@ import { primaryColors } from '../color-choice'
 })
 export class FormComponent implements OnInit, OnDestroy {
 
-    filterRange = [0, 7];
-    tooltipMap = ["MORNING OK", "> 9am", "> 10am", "< 5pm", "< 6pm", "< 7pm", "< 8pm", "EVENING OK"];
+    filterRange: any[] = [0, 7];
+    tooltipMap = ["MORNING OK", ">09 am", ">10 am", "<05 pm", "<06 pm", "<07 pm", "<08 pm", "EVENING OK"];
 
     filterRangeConfig: any = {
         connect: true,
@@ -44,9 +44,9 @@ export class FormComponent implements OnInit, OnDestroy {
             to: (value => this.tooltipMap[value]),
             from: (value => value)
         }
-      };
+    };
 
-    @Output() courses: EventEmitter<string[]> = new EventEmitter();
+    @Output() courses: EventEmitter<any> = new EventEmitter();
     @Input() freezeGenerateButton: boolean;
 
     /**
@@ -104,7 +104,10 @@ export class FormComponent implements OnInit, OnDestroy {
                 courses.push(ctrl.value);
             }
         }
-        this.courses.emit(courses);
+        this.courses.emit({
+            courses: courses,
+            filterInfo: this.filterRange
+        });
     }
 
     /**
