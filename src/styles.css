@@ -6,6 +6,9 @@
     font-weight: bold;
 }
 
+
+
+
 /* this may screw up font-awesome icons for some reason without the "not" */
 *:not(i) {
     font-family: 'Dosis', sans-serif !important;
@@ -52,7 +55,7 @@ i {
     padding-top: .1em;
     padding-left: .5em;
     padding-bottom: .1em;
-    padding-right: .5em;
+    padding-right: 0;
 }
 
 /* Property of the line at x hour 30 minutes */
@@ -64,4 +67,45 @@ i {
 /* Top line of the whole table */
 .fc-head-container{
     border-top-width: .15em !important;
+}
+
+/* Tutorial formatting */
+.theader {
+    text-align: center;
+    display: block;
+    font-size: 1.5em;
+    margin: .5em auto 1.5em auto;
+}
+
+.theader-left {
+    color: #212121;
+    padding-right: .1em;
+}
+
+.theader-right {
+    font-weight: 400 !important;
+    color: #616161; 
+} 
+
+.tcontent {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.tcontent-head {
+    color: #616161;
+    font-size: 1.2em;
+    text-align: center;
+    display: block;
+    margin-bottom: .2em;
+}
+
+.tcontent-body {
+    color: #9E9E9E;
+    font-weight: 400 !important;
+    font-size: 1em;
+    text-align: justify;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-bottom: 1.5em;
 }
