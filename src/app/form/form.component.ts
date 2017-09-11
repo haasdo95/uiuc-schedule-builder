@@ -22,6 +22,30 @@ import { primaryColors } from '../color-choice'
 })
 export class FormComponent implements OnInit, OnDestroy {
 
+    filterRange = [0, 7];
+    tooltipMap = ["MORNING OK", "> 9am", "> 10am", "< 5pm", "< 6pm", "< 7pm", "< 8pm", "EVENING OK"];
+
+    filterRangeConfig: any = {
+        connect: true,
+        start: [0, 7],
+        snap: true,
+        range: {
+            min: 0,
+            '10%': 1,
+            '20%': 2,
+            '60%': 3,
+            '70%': 4,
+            '80%': 5,
+            '90%': 6,
+            max: 7
+        },
+        tooltips: [true, true],
+        format: {
+            to: (value => this.tooltipMap[value]),
+            from: (value => value)
+        }
+      };
+
     @Output() courses: EventEmitter<string[]> = new EventEmitter();
     @Input() freezeGenerateButton: boolean;
 

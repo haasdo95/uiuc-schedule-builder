@@ -1,6 +1,5 @@
-<form [formGroup]="formModel">
+<form style="margin-bottom: 5em" [formGroup]="formModel">
     <div class="form-group">
-        
         <div class="serious-margin-hack">
             <ul class="" formArrayName="classes">
                 <li class="mb-3" *ngFor="let c of formModel.controls['classes'].controls; let i=index"> 
@@ -54,6 +53,9 @@
                 ">GENERATE A SCHEDULE!</button>
             </div>
         </div>
-
     </div>
 </form>
+<!-- morning/evening classes filter -->
+<div class="pl-5 pr-5">
+    <nouislider [config]="filterRangeConfig" [(ngModel)]="filterRange"></nouislider>
+</div>

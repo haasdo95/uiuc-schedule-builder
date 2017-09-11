@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/toPromise';
 
+import * as _ from "lodash";
+
 import { Class } from './class-section'
 
 @Injectable()
@@ -21,9 +23,6 @@ export class CourseInfoService {
      * ask the server for the whole list of course names and form a Trie
      * and, to prevent further server query, cache it.
      * 
-     * TODO: if the user types too fast, we could probably issue multiple queries,
-     *       which are extremely expensive.
-     *       switchMap looks promising here.
      */
     getCourseList(): Promise<Trie> {
         if (!this.courseNames) {
@@ -44,7 +43,11 @@ export class CourseInfoService {
     getCoursesInfoByName(names: string[]): Observable<Class[]> {
         return this.http.post('api/courses', {courseNames: names})
                  .map(res => {
-                        return res.json().courses
+                        const courses = <Class[]>res.json().courses;
+                        courses.forEach(course => {
+                            course.sections = _.shuffle(course.sections);
+                        })
+                        return courses;
                     }
                 )
     }

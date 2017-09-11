@@ -32,6 +32,8 @@
     "moment": "^2.18.1",
     "mongoose": "^4.11.10",
     "morgan": "^1.8.2",
+    "ng2-nouislider": "^1.6.2",
+    "nouislider": "^10.1.0",
     "path": "^0.12.7",
     "primeng": "^4.1.0",
     "rxjs": "^5.2.0",

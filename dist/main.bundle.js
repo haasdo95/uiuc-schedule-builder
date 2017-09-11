@@ -586,9 +586,11 @@ var _a, _b;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_http__ = __webpack_require__("./node_modules/@angular/http/@angular/http.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_primeng_primeng__ = __webpack_require__("./node_modules/primeng/primeng.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_primeng_primeng___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_primeng_primeng__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__("./src/app/app.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__form_form_component__ = __webpack_require__("./src/app/form/form.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__schedule_schedule_component__ = __webpack_require__("./src/app/schedule/schedule.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ng2_nouislider__ = __webpack_require__("./node_modules/ng2-nouislider/src/nouislider.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ng2_nouislider___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_ng2_nouislider__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_component__ = __webpack_require__("./src/app/app.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__form_form_component__ = __webpack_require__("./src/app/form/form.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__schedule_schedule_component__ = __webpack_require__("./src/app/schedule/schedule.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -604,14 +606,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_2__angular_core__["NgModule"])({
         declarations: [
-            __WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* AppComponent */],
-            __WEBPACK_IMPORTED_MODULE_7__form_form_component__["a" /* FormComponent */],
-            __WEBPACK_IMPORTED_MODULE_8__schedule_schedule_component__["a" /* ScheduleComponent */],
+            __WEBPACK_IMPORTED_MODULE_7__app_component__["a" /* AppComponent */],
+            __WEBPACK_IMPORTED_MODULE_8__form_form_component__["a" /* FormComponent */],
+            __WEBPACK_IMPORTED_MODULE_9__schedule_schedule_component__["a" /* ScheduleComponent */],
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["BrowserModule"],
@@ -620,10 +623,11 @@ AppModule = __decorate([
             __WEBPACK_IMPORTED_MODULE_3__angular_forms__["ReactiveFormsModule"],
             __WEBPACK_IMPORTED_MODULE_4__angular_http__["b" /* HttpModule */],
             __WEBPACK_IMPORTED_MODULE_5_primeng_primeng__["ScheduleModule"],
+            __WEBPACK_IMPORTED_MODULE_6_ng2_nouislider__["NouisliderModule"]
         ],
         schemas: [__WEBPACK_IMPORTED_MODULE_2__angular_core__["NO_ERRORS_SCHEMA"]],
         providers: [],
-        bootstrap: [__WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* AppComponent */]]
+        bootstrap: [__WEBPACK_IMPORTED_MODULE_7__app_component__["a" /* AppComponent */]]
     })
 ], AppModule);
 
@@ -659,6 +663,8 @@ const secondaryColors = ["#E3F2FD", "#E8F5E9", "#F1F8E9", "#F9FBE7", "#FFFDE7", 
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_observable_of___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_observable_of__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise__ = __webpack_require__("./node_modules/rxjs/add/operator/toPromise.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rxjs_add_operator_toPromise__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash__ = __webpack_require__("./node_modules/lodash/lodash.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_lodash__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -668,6 +674,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
 
 
 
@@ -685,9 +692,6 @@ let CourseInfoService = class CourseInfoService {
      * ask the server for the whole list of course names and form a Trie
      * and, to prevent further server query, cache it.
      *
-     * TODO: if the user types too fast, we could probably issue multiple queries,
-     *       which are extremely expensive.
-     *       switchMap looks promising here.
      */
     getCourseList() {
         if (!this.courseNames) {
@@ -707,7 +711,11 @@ let CourseInfoService = class CourseInfoService {
     getCoursesInfoByName(names) {
         return this.http.post('api/courses', { courseNames: names })
             .map(res => {
-            return res.json().courses;
+            const courses = res.json().courses;
+            courses.forEach(course => {
+                course.sections = __WEBPACK_IMPORTED_MODULE_5_lodash__["shuffle"](course.sections);
+            });
+            return courses;
         });
     }
 };
@@ -742,7 +750,7 @@ module.exports = module.exports.toString();
 /***/ "./src/app/form/form.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<form [formGroup]=\"formModel\">\n    <div class=\"form-group\">\n        \n        <div class=\"serious-margin-hack\">\n            <ul class=\"\" formArrayName=\"classes\">\n                <li class=\"mb-3\" *ngFor=\"let c of formModel.controls['classes'].controls; let i=index\"> \n                    <div [style.border-color]=\"colorArray[i % colorArray.length]\" class=\"input-group\">\n                        <span [style.color]=\"colorArray[i % colorArray.length]\" class=\"input-group-btn\">\n                            <button (click)=\"insertCourse(i)\"\n                                class=\"insertButton btn my-0 embedButton pad-hack\">\n                                <i class=\"fa fa-plus\"></i>\n                            </button>\n                        </span>\n                        <input [style.color]=\"colorArray[i % colorArray.length]\"\n                         (keydown.tab)=\"fillWithFirst(c, i, $event)\" (keydown.enter)=\"fillWithFirst(c, i, $event)\"\n                            placeholder=\"e.g. CS 225\"\n                            (focus)=\"showHints(c.value, i)\" (blur)=\"hideHints($event, i)\" type=\"text\" id=\"_{{i}}\"\n                            name=\"_{{i}}\" class=\"form-control d-inline pad-hack\" [formControlName]=\"i\">\n                        \n                        <span [style.color]=\"colorArray[i % colorArray.length]\" class=\"input-group-btn\">\n                            <button (click)=\"oneMoreOrOneLess(i)\"\n                                class=\"deleteButton btn my-0 embedButton pad-hack\">\n                                <i class=\"fa fa-times\"></i>\n                            </button>\n                        </span>\n                    </div>\n                    <!-- auto-complete -->\n                    <div class=\"container\">\n                        <div class=\"row pl-5\">\n                            <div *ngFor=\"let hint of hints[i]; let j = index\" class=\"col-xs-2\">\n                                <button (click)=\"fillOut(hint, i)\" type=\"button\" \n                                    [class.btn-outline-info]=\"j != 0\" [class.btn-info]=\"j == 0\"\n                                    class=\"dontBlur btn btn-sm\">\n                                    {{hint}}\n                                </button>\n                            </div>\n                        </div>\n                    </div>\n                    <!-- end of auto-complete -->\n                </li>\n            </ul>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6 col-lg-12 mb-3\">\n                <button (click)=\"oneMoreOrOneLess(-1)\" type=\"button\" \n                class=\"btn btn-block formHeading pad-hack\n                \">ONE MORE CLASS!</button>\n            </div>\n            <div class=\"col-sm-6 col-lg-12\">\n                <button (click)=\"generate()\" type=\"button\"\n                [disabled]=\"freezeGenerateButton\"\n                class=\"btn btn-block formHeading pad-hack\n                \">GENERATE A SCHEDULE!</button>\n            </div>\n        </div>\n\n    </div>\n</form>"
+module.exports = "<form style=\"margin-bottom: 5em\" [formGroup]=\"formModel\">\n    <div class=\"form-group\">\n        <div class=\"serious-margin-hack\">\n            <ul class=\"\" formArrayName=\"classes\">\n                <li class=\"mb-3\" *ngFor=\"let c of formModel.controls['classes'].controls; let i=index\"> \n                    <div [style.border-color]=\"colorArray[i % colorArray.length]\" class=\"input-group\">\n                        <span [style.color]=\"colorArray[i % colorArray.length]\" class=\"input-group-btn\">\n                            <button (click)=\"insertCourse(i)\"\n                                class=\"insertButton btn my-0 embedButton pad-hack\">\n                                <i class=\"fa fa-plus\"></i>\n                            </button>\n                        </span>\n                        <input [style.color]=\"colorArray[i % colorArray.length]\"\n                         (keydown.tab)=\"fillWithFirst(c, i, $event)\" (keydown.enter)=\"fillWithFirst(c, i, $event)\"\n                            placeholder=\"e.g. CS 225\"\n                            (focus)=\"showHints(c.value, i)\" (blur)=\"hideHints($event, i)\" type=\"text\" id=\"_{{i}}\"\n                            name=\"_{{i}}\" class=\"form-control d-inline pad-hack\" [formControlName]=\"i\">\n                        \n                        <span [style.color]=\"colorArray[i % colorArray.length]\" class=\"input-group-btn\">\n                            <button (click)=\"oneMoreOrOneLess(i)\"\n                                class=\"deleteButton btn my-0 embedButton pad-hack\">\n                                <i class=\"fa fa-times\"></i>\n                            </button>\n                        </span>\n                    </div>\n                    <!-- auto-complete -->\n                    <div class=\"container\">\n                        <div class=\"row pl-5\">\n                            <div *ngFor=\"let hint of hints[i]; let j = index\" class=\"col-xs-2\">\n                                <button (click)=\"fillOut(hint, i)\" type=\"button\" \n                                    [class.btn-outline-info]=\"j != 0\" [class.btn-info]=\"j == 0\"\n                                    class=\"dontBlur btn btn-sm\">\n                                    {{hint}}\n                                </button>\n                            </div>\n                        </div>\n                    </div>\n                    <!-- end of auto-complete -->\n                </li>\n            </ul>\n        </div>\n\n        <div class=\"row\">\n            <div class=\"col-sm-6 col-lg-12 mb-3\">\n                <button (click)=\"oneMoreOrOneLess(-1)\" type=\"button\" \n                class=\"btn btn-block formHeading pad-hack\n                \">ONE MORE CLASS!</button>\n            </div>\n            <div class=\"col-sm-6 col-lg-12\">\n                <button (click)=\"generate()\" type=\"button\"\n                [disabled]=\"freezeGenerateButton\"\n                class=\"btn btn-block formHeading pad-hack\n                \">GENERATE A SCHEDULE!</button>\n            </div>\n        </div>\n    </div>\n</form>\n<!-- morning/evening classes filter -->\n<div class=\"pl-5 pr-5\">\n    <nouislider [config]=\"filterRangeConfig\" [(ngModel)]=\"filterRange\"></nouislider>\n</div>"
 
 /***/ }),
 
@@ -780,6 +788,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 let FormComponent = class FormComponent {
     constructor(cis) {
         this.cis = cis;
+        this.filterRange = [0, 7];
+        this.tooltipMap = ["MORNING OK", "> 9am", "> 10am", "< 5pm", "< 6pm", "< 7pm", "< 8pm", "EVENING OK"];
+        this.filterRangeConfig = {
+            connect: true,
+            start: [0, 7],
+            snap: true,
+            range: {
+                min: 0,
+                '10%': 1,
+                '20%': 2,
+                '60%': 3,
+                '70%': 4,
+                '80%': 5,
+                '90%': 6,
+                max: 7
+            },
+            tooltips: [true, true],
+            format: {
+                to: (value => this.tooltipMap[value]),
+                from: (value => value)
+            }
+        };
         this.courses = new __WEBPACK_IMPORTED_MODULE_0__angular_core__["EventEmitter"]();
         /**
          * trie structure for auto-complete

@@ -6,8 +6,7 @@
     font-weight: bold;
 }
 
-
-
+@import "~nouislider/distribute/nouislider.min.css";
 
 /* this may screw up font-awesome icons for some reason without the "not" */
 *:not(i) {
