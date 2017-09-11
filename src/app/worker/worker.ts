@@ -18,13 +18,13 @@ export class SchedulingWorker {
             f1 = (sec) => true;
         else {
             const morningTime = moment(morning.slice(1), "hh a");
-            f1 = (sec: Section) => sec.meetings.range.from > morningTime;
+            f1 = (sec: Section) => sec.meetings.range.from >= morningTime;
         }
         if (evening == 7 || evening == "EVENING OK")
             f2 = (sec) => true;
         else {
             const eveningTime = moment(evening.slice(1), "hh a");
-            f2 = (sec: Section) => sec.meetings.range.to < eveningTime;
+            f2 = (sec: Section) => sec.meetings.range.to <= eveningTime;
         }
         return (section: Section) => f1(section) && f2 (section);
     }
