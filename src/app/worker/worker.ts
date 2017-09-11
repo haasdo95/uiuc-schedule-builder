@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import { Moment } from 'moment';
 
 import { EXCEPTIONS } from '../exceptions';
+import {log} from "util";
 
 export class SchedulingWorker {
 
@@ -18,6 +19,7 @@ export class SchedulingWorker {
             f1 = (sec) => true;
         else {
             const morningTime = moment(morning.slice(1), "hh a");
+            console.log("MORNING: ", morningTime.format());
             f1 = (sec: Section) => sec.meetings.range.from >= morningTime;
         }
         if (evening == 7 || evening == "EVENING OK")
