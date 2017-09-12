@@ -20,8 +20,8 @@ export class SchedulingWorker {
             const morningTime = moment(morning.slice(1), "hh a");
             console.log("MORNING: ", morningTime.format());
             f1 = (sec: Section) => {
-                console.log("Section: ", moment(sec.meetings.range.from));
-                console.log("MorningTime: ", morningTime);
+                console.log("Section: ", moment(sec.meetings.range.from).format());
+                console.log("MorningTime: ", morningTime.format());
                 return moment(sec.meetings.range.from) >= morningTime;
             };
         }
@@ -30,6 +30,8 @@ export class SchedulingWorker {
         else {
             const eveningTime = moment(evening.slice(1), "hh a");
             f2 = (sec: Section) => {
+                console.log("Section: ", moment(sec.meetings.range.to).format());
+                console.log("MorningTime: ", eveningTime.format());
                 return moment(sec.meetings.range.to) <= eveningTime;
             }
         }
