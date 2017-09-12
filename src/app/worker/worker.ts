@@ -16,24 +16,19 @@ export class SchedulingWorker {
     private createFilter(morning: any, evening: any): (section: Section)=>boolean {
         let f1: Function;
         let f2: Function;
-        if (morning == 0 || morning == "MORNING OK")
+        if (morning == 0)
             f1 = (sec) => true;
         else {
             const morningTime = moment(morning.slice(1), "hh a");
-            console.log("MORNING: ", morningTime.format());
             f1 = (sec: Section) => {
-                console.log("Section: ", moment(sec.meetings.time.from, "hh:mm A"));
-                console.log("MorningTime: ", morningTime.format());
                 return moment(sec.meetings.time.from, "hh:mm A") >= morningTime;
             };
         }
-        if (evening == 7 || evening == "EVENING OK")
+        if (evening == 7)
             f2 = (sec) => true;
         else {
             const eveningTime = moment(evening.slice(1), "hh a");
             f2 = (sec: Section) => {
-                console.log("Section: ", moment(sec.meetings.time.to, "hh:mm A"));
-                console.log("Evening: ", eveningTime.format());
                 return moment(sec.meetings.time.to, "hh:mm A") <= eveningTime;
             }
         }
