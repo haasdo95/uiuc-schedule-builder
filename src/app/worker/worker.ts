@@ -26,6 +26,8 @@ export class SchedulingWorker {
             f1 = (sec: Section) => {
                 console.log("Section: ", moment(sec.meetings.range.from).format());
                 console.log("MorningTime: ", morningTime.format());
+                console.log("section MINUTES: ", this.minutesOfDay(moment(sec.meetings.range.from)));
+                console.log("MORNING TIME: ", this.minutesOfDay(morningTime))
                 return this.minutesOfDay(moment(sec.meetings.range.from)) >= this.minutesOfDay(morningTime);
             };
         }
