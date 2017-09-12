@@ -1,6 +1,7 @@
 import { Class, Section, Meeting, Range } from '../class-section'
 import * as _ from "lodash";
-import * as moment from 'moment';
+import * as moment from 'moment-timezone';
+// import * as moment from 'moment';
 import { Moment } from 'moment';
 
 import { EXCEPTIONS } from '../exceptions';
@@ -10,10 +11,6 @@ export class SchedulingWorker {
     constructor() { }
 
     private rangeFilter: (section: Section)=>boolean;
-
-    private minutesOfDay(m: Moment) {
-        return m.minutes() + m.hours() * 60;
-    }
     
     private createFilter(morning: any, evening: any): (section: Section)=>boolean {
         let f1: Function;
@@ -24,11 +21,9 @@ export class SchedulingWorker {
             const morningTime = moment(morning.slice(1), "hh a");
             console.log("MORNING: ", morningTime.format());
             f1 = (sec: Section) => {
-                console.log("Section: ", moment(sec.meetings.range.from).format());
+                console.log("Section: ", moment(sec.meetings.range.from).tz("America_Chicago").format());
                 console.log("MorningTime: ", morningTime.format());
-                console.log("section MINUTES: ", this.minutesOfDay(moment(sec.meetings.range.from)));
-                console.log("MORNING TIME: ", this.minutesOfDay(morningTime))
-                return moment(sec.meetings.range.from) >= morningTime;
+                return moment(sec.meetings.range.from).tz("America_Chicago") >= morningTime;
             };
         }
         if (evening == 7 || evening == "EVENING OK")
@@ -38,7 +33,7 @@ export class SchedulingWorker {
             f2 = (sec: Section) => {
                 console.log("Section: ", moment(sec.meetings.range.to).format());
                 console.log("Evening: ", eveningTime.format());
-                return moment(sec.meetings.range.to) <= eveningTime;
+                return moment(sec.meetings.range.to).tz("America_Chicago") <= eveningTime;
             }
         }
         return (section: Section) => f1(section) && f2 (section);
