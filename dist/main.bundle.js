@@ -257,7 +257,7 @@ webpackContext.id = "./node_modules/moment/locale recursive ^\\.\\/.*$";
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = function() {
-	return new Worker(__webpack_require__.p + "f9c935272d54d7112941.worker.js");
+	return new Worker(__webpack_require__.p + "8ba7aadf46ccf95ad3ec.worker.js");
 };
 
 /***/ }),
