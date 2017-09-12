@@ -23,7 +23,7 @@ import { primaryColors } from '../color-choice'
 export class FormComponent implements OnInit, OnDestroy {
 
     filterRange: any[] = [0, 7];
-    tooltipMap = ["MORNING OK", ">09 am", ">10 am", "<05 pm", "<06 pm", "<07 pm", "<08 pm", "EVENING OK"];
+    tooltipMap = ["08 AM", "09 AM", "10 AM", "05 PM", "06 PM", "07 PM", "08 PM", "09 PM"];
 
     filterRangeConfig: any = {
         connect: true,

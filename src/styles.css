@@ -190,3 +190,82 @@ footer { /* This is required for a sticky footer */
     font-weight: 400 !important;
     font-size: 1em;
 }
+
+/* =====noUi Slider Property===== */
+/* Whole slider */
+.noUi-horizontal {
+    height: .1em;
+    border-width: 0;
+    background-color: #BDBDBD;
+    box-shadow: none;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+/* Selected slider region */
+.noUi-connect {
+    border-width: 0;
+    background-color: #212121;
+}
+
+/* Handle */
+.noUi-handle {
+    border-width: .1em;
+    border-radius: 1em;
+    border-color: #212121;
+    background-color: #FFFFFF;
+    box-shadow: none;
+    height: 2em !important;
+    width: 1em !important;
+    top: -1em !important;
+    left: -0.5em !important;
+    outline: none;
+    transition-delay: 0s;
+    transition-duration: 0.2s;
+    transition-property: all;
+    transition-timing-function: ease-in-out;
+}
+
+.noUi-handle:hover {
+    background-color: #FFFFFF;
+    height: 2em !important;
+    width: 2em !important;
+    top: -1em !important;
+    left: -1em !important;
+    border-radius: 1em;
+    border-width: .1em;
+    border-color: #212121;
+    color: #212121;
+}
+
+.noUi-handle::after,
+.noUi-handle::before {
+    height: 0;
+    width: 0;
+}
+
+.noUi-tooltip {
+    border: 0;
+    color: #616161;
+    font-size: 1em;
+    padding: 0;
+    background-color: transparent;
+    bottom: -1.75em !important;
+}
+
+.form-slider {
+    padding-top: .01em;
+    padding-bottom: .01em !important;
+    margin-bottom: 2em;
+}
+
+
+/* 
+.noUi-handle::before {
+    height: 2em;
+    width: .15em;
+    left: .95em;
+    top: 0;
+    border: 0;
+    background-color: #212121;
+} */

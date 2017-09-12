@@ -1,8 +1,8 @@
-<form style="margin-bottom: 5em" [formGroup]="formModel">
+<form [formGroup]="formModel">
     <div class="form-group">
         <div class="serious-margin-hack">
             <ul class="" formArrayName="classes">
-                <li class="mb-3" *ngFor="let c of formModel.controls['classes'].controls; let i=index"> 
+                <li class="form-group-margin" *ngFor="let c of formModel.controls['classes'].controls; let i=index"> 
                     <div [style.border-color]="colorArray[i % colorArray.length]" class="input-group">
                         <span [style.color]="colorArray[i % colorArray.length]" class="input-group-btn">
                             <button (click)="insertCourse(i)"
@@ -41,12 +41,12 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-6 col-lg-12 mb-3">
+            <div class="col-sm-6 col-lg-12 form-group-margin">
                 <button (click)="oneMoreOrOneLess(-1)" type="button" 
                 class="btn btn-block formHeading pad-hack
                 ">ONE MORE CLASS!</button>
             </div>
-            <div class="col-sm-6 col-lg-12">
+            <div class="col-sm-6 col-lg-12 form-group-margin">
                 <button (click)="generate()" type="button"
                 [disabled]="freezeGenerateButton"
                 class="btn btn-block formHeading pad-hack
@@ -55,8 +55,8 @@
         </div>
     </div>
 </form>
-<!-- morning/evening classes filter -->
-<div class="pl-5 pr-5">
+ <!-- morning/evening classes filter -->
+ <div class="form-slider">
     <nouislider [config]="filterRangeConfig" [(ngModel)]="filterRange" 
     ></nouislider>
 </div>

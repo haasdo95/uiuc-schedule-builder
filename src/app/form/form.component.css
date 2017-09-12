@@ -5,7 +5,11 @@ ul {
 
 /* =====Form Property===== */
 .form-group {
-    margin-bottom: 2em;
+    margin-bottom: 1em;
+}
+
+.form-group-margin {
+    margin-bottom: 1em;
 }
 
 input {
@@ -103,6 +107,7 @@ input:focus {
     color: #212121;
     border: .1em solid #212121;
     border-radius: 999em;
+    margin-bottom: 0;
 }
 
 .formHeading:hover {
