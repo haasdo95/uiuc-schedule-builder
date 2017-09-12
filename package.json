@@ -30,7 +30,7 @@
     "font-awesome": "^4.7.0",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
-    "moment-timezone-with-data-2010-2020": "^0.4.0",
+    "moment-timezone": "^0.5.13",
     "mongoose": "^4.11.10",
     "morgan": "^1.8.2",
     "ng2-nouislider": "^1.6.2",
