@@ -28,7 +28,7 @@ export class SchedulingWorker {
                 console.log("MorningTime: ", morningTime.format());
                 console.log("section MINUTES: ", this.minutesOfDay(moment(sec.meetings.range.from)));
                 console.log("MORNING TIME: ", this.minutesOfDay(morningTime))
-                return this.minutesOfDay(moment(sec.meetings.range.from)) >= this.minutesOfDay(morningTime);
+                return this.minutesOfDay(moment(sec.meetings.range.from).add(2, "h")) >= this.minutesOfDay(morningTime);
             };
         }
         if (evening == 7 || evening == "EVENING OK")
@@ -38,7 +38,7 @@ export class SchedulingWorker {
             f2 = (sec: Section) => {
                 console.log("Section: ", moment(sec.meetings.range.to).format());
                 console.log("MorningTime: ", eveningTime.format());
-                return this.minutesOfDay(moment(sec.meetings.range.to)) <= this.minutesOfDay(eveningTime);
+                return this.minutesOfDay(moment(sec.meetings.range.to).add(2, "h")) <= this.minutesOfDay(eveningTime);
             }
         }
         return (section: Section) => f1(section) && f2 (section);
