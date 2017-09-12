@@ -109,16 +109,20 @@ class SchedulingWorker {
             const morningTime = __WEBPACK_IMPORTED_MODULE_1_moment__(morning.slice(1), "hh a");
             console.log("MORNING: ", morningTime.format());
             f1 = (sec) => {
-                console.log("Section: ", sec.meetings.range.from);
-                console.log("MorningTime: ", morningTime);
-                return sec.meetings.range.from >= morningTime;
+                console.log("Section: ", sec.meetings.range.from.add(2, "h"));
+                console.log("MorningTime: ", morningTime.unix());
+                return sec.meetings.range.from.add(2, "h") >= morningTime;
             };
         }
         if (evening == 7 || evening == "EVENING OK")
             f2 = (sec) => true;
         else {
             const eveningTime = __WEBPACK_IMPORTED_MODULE_1_moment__(evening.slice(1), "hh a");
-            f2 = (sec) => sec.meetings.range.to <= eveningTime;
+            f2 = (sec) => {
+                console.log("Section: ", sec.meetings.range.to.add(2, "h"));
+                console.log("EveningTime: ", eveningTime.unix());
+                return sec.meetings.range.to.add(2, "h") <= eveningTime;
+            };
         }
         return (section) => f1(section) && f2(section);
     }
@@ -33424,4 +33428,4 @@ const EXCEPTIONS = {
 /***/ })
 
 /******/ });
-//# sourceMappingURL=f4f3c704cd0e9e73b3e2.worker.js.map
+//# sourceMappingURL=b7d1540e46e653d507e9.worker.js.map
