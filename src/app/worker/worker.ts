@@ -1,6 +1,7 @@
 import { Class, Section, Meeting, Range } from '../class-section'
 import * as _ from "lodash";
-import * as moment from 'moment';
+// import * as moment from 'moment';
+import * as moment from 'moment-timezone';
 import { Moment } from 'moment';
 
 import { EXCEPTIONS } from '../exceptions';
@@ -20,9 +21,9 @@ export class SchedulingWorker {
             const morningTime = moment(morning.slice(1), "hh a");
             console.log("MORNING: ", morningTime.format());
             f1 = (sec: Section) => {
-                console.log("Section: ", sec.meetings.range.from);
+                console.log("Section: ", sec.meetings.range.from.tz("America/Chicago"));
                 console.log("MorningTime: ", morningTime.unix());
-                return sec.meetings.range.from >= morningTime;
+                return sec.meetings.range.from.tz("America/Chicago") >= morningTime;
             };
         }
         if (evening == 7 || evening == "EVENING OK")
@@ -30,9 +31,9 @@ export class SchedulingWorker {
         else {
             const eveningTime = moment(evening.slice(1), "hh a");
             f2 = (sec: Section) => {
-                console.log("Section: ", sec.meetings.range.to);
+                console.log("Section: ", sec.meetings.range.to.tz("America/Chicago"));
                 console.log("EveningTime: ", eveningTime.unix());
-                return sec.meetings.range.to <= eveningTime;
+                return sec.meetings.range.to.tz("America/Chicago") <= eveningTime;
             }
         }
         return (section: Section) => f1(section) && f2 (section);
