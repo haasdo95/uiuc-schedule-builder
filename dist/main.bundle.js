@@ -257,7 +257,7 @@ webpackContext.id = "./node_modules/moment/locale recursive ^\\.\\/.*$";
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = function() {
-	return new Worker(__webpack_require__.p + "cc0f442bb0474ca5dea3.worker.js");
+	return new Worker(__webpack_require__.p + "fbab422012d9afa1802f.worker.js");
 };
 
 /***/ }),
@@ -514,7 +514,6 @@ let AppComponent = class AppComponent {
         })
             .switchMap(courses => this.cis.getCoursesInfoByName(courses))
             .subscribe(fetchedCourses => {
-            console.log("filter info: ", filterInfo);
             this.worker.postMessage({
                 reset: true,
                 courses: fetchedCourses,

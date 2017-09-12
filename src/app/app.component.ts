@@ -226,7 +226,6 @@ export class AppComponent implements OnInit {
                     this.cis.getCoursesInfoByName(courses)
                )
                .subscribe(fetchedCourses => {
-                   console.log("filter info: ", filterInfo);
                     this.worker.postMessage({
                         reset: true,
                         courses: fetchedCourses,

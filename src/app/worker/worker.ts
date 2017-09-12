@@ -9,9 +9,6 @@ import { EXCEPTIONS } from '../exceptions';
 export class SchedulingWorker {
 
     constructor() {
-        console.log("I guess you are at: ", moment.tz.guess());
-        
-        moment.tz.add("America/Chicago|CST CDT EST CWT CPT|60 50 50 50 50|01010101010101010101010101010101010102010101010103401010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010|-261s0 1nX0 11B0 1nX0 1wp0 TX0 WN0 1qL0 1cN0 WL0 1qN0 11z0 1o10 11z0 1o10 11z0 1o10 11z0 1o10 11z0 1qN0 11z0 1o10 11z0 1o10 11z0 1o10 11z0 1o10 11z0 1qN0 WL0 1qN0 11z0 1o10 11z0 11B0 1Hz0 14p0 11z0 1o10 11z0 1qN0 WL0 1qN0 11z0 1o10 11z0 RB0 8x30 iw0 1o10 11z0 1o10 11z0 1o10 11z0 1o10 11z0 1qN0 WL0 1qN0 11z0 1o10 11z0 1o10 11z0 1o10 11z0 1o10 1fz0 1cN0 1cL0 1cN0 1cL0 1cN0 1cL0 1cN0 1cL0 1cN0 1fz0 1cN0 1cL0 1cN0 1cL0 1cN0 1cL0 1cN0 1cL0 1cN0 1fz0 1a10 1fz0 1cN0 1cL0 1cN0 1cL0 1cN0 1cL0 1cN0 1cL0 1cN0 1fz0 1cN0 1cL0 1cN0 1cL0 s10 1Vz0 LB0 1BX0 1cN0 1fz0 1a10 1fz0 1cN0 1cL0 1cN0 1cL0 1cN0 1cL0 1cN0 1cL0 1cN0 1fz0 1a10 1fz0 1cN0 1cL0 1cN0 1cL0 1cN0 1cL0 14p0 1lb0 14p0 1nX0 11B0 1nX0 11B0 1nX0 14p0 1lb0 14p0 1lb0 14p0 1nX0 11B0 1nX0 11B0 1nX0 14p0 1lb0 14p0 1lb0 14p0 1lb0 14p0 1nX0 11B0 1nX0 11B0 1nX0 14p0 1lb0 14p0 1lb0 14p0 1nX0 11B0 1nX0 11B0 1nX0 Rd0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0|92e5");
     }
 
     private rangeFilter: (section: Section)=>boolean;
@@ -25,9 +22,9 @@ export class SchedulingWorker {
             const morningTime = moment(morning.slice(1), "hh a");
             console.log("MORNING: ", morningTime.format());
             f1 = (sec: Section) => {
-                console.log("Section: ", moment(sec.meetings.range.from).tz("America/Chicago").format());
+                console.log("Section: ", moment(sec.meetings.time.from, "hh:mm A"));
                 console.log("MorningTime: ", morningTime.format());
-                return moment(sec.meetings.range.from).tz("America/Chicago") >= morningTime;
+                return moment(sec.meetings.time.from, "hh:mm A") >= morningTime;
             };
         }
         if (evening == 7 || evening == "EVENING OK")
@@ -35,9 +32,9 @@ export class SchedulingWorker {
         else {
             const eveningTime = moment(evening.slice(1), "hh a");
             f2 = (sec: Section) => {
-                console.log("Section: ", moment(sec.meetings.range.to).format());
+                console.log("Section: ", moment(sec.meetings.time.to, "hh:mm A"));
                 console.log("Evening: ", eveningTime.format());
-                return moment(sec.meetings.range.to).tz("America/Chicago") <= eveningTime;
+                return moment(sec.meetings.time.to, "hh:mm A") <= eveningTime;
             }
         }
         return (section: Section) => f1(section) && f2 (section);
