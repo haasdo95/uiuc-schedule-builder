@@ -10,6 +10,10 @@ export class SchedulingWorker {
     constructor() { }
 
     private rangeFilter: (section: Section)=>boolean;
+
+    private minutesOfDay(m: Moment) {
+        return m.minutes() + m.hours() * 60;
+    }
     
     private createFilter(morning: any, evening: any): (section: Section)=>boolean {
         let f1: Function;
@@ -22,7 +26,7 @@ export class SchedulingWorker {
             f1 = (sec: Section) => {
                 console.log("Section: ", moment(sec.meetings.range.from).format());
                 console.log("MorningTime: ", morningTime.format());
-                return moment(sec.meetings.range.from) >= morningTime;
+                return this.minutesOfDay(moment(sec.meetings.range.from)) >= this.minutesOfDay(morningTime);
             };
         }
         if (evening == 7 || evening == "EVENING OK")
@@ -32,7 +36,7 @@ export class SchedulingWorker {
             f2 = (sec: Section) => {
                 console.log("Section: ", moment(sec.meetings.range.to).format());
                 console.log("MorningTime: ", eveningTime.format());
-                return moment(sec.meetings.range.to) <= eveningTime;
+                return this.minutesOfDay(moment(sec.meetings.range.to)) <= this.minutesOfDay(eveningTime);
             }
         }
         return (section: Section) => f1(section) && f2 (section);
