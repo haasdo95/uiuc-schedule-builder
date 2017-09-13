@@ -19,7 +19,7 @@ export class SchedulingWorker {
         if (morning == 0)
             f1 = (sec) => true;
         else {
-            const morningTime = moment(morning.slice(1), "hh a");
+            const morningTime = moment(morning, "hh a");
             f1 = (sec: Section) => {
                 return moment(sec.meetings.time.from, "hh:mm A") >= morningTime;
             };
@@ -27,7 +27,7 @@ export class SchedulingWorker {
         if (evening == 7)
             f2 = (sec) => true;
         else {
-            const eveningTime = moment(evening.slice(1), "hh a");
+            const eveningTime = moment(evening, "hh a");
             f2 = (sec: Section) => {
                 return moment(sec.meetings.time.to, "hh:mm A") <= eveningTime;
             }

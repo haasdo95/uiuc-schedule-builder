@@ -99,31 +99,24 @@ class SchedulingWorker {
                 }
             }
         }).bind(this);
-        console.log("I guess you are at: ", __WEBPACK_IMPORTED_MODULE_1_moment_timezone__["tz"].guess());
-        __WEBPACK_IMPORTED_MODULE_1_moment_timezone__["tz"].add("America/Chicago|CST CDT EST CWT CPT|60 50 50 50 50|01010101010101010101010101010101010102010101010103401010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010|-261s0 1nX0 11B0 1nX0 1wp0 TX0 WN0 1qL0 1cN0 WL0 1qN0 11z0 1o10 11z0 1o10 11z0 1o10 11z0 1o10 11z0 1qN0 11z0 1o10 11z0 1o10 11z0 1o10 11z0 1o10 11z0 1qN0 WL0 1qN0 11z0 1o10 11z0 11B0 1Hz0 14p0 11z0 1o10 11z0 1qN0 WL0 1qN0 11z0 1o10 11z0 RB0 8x30 iw0 1o10 11z0 1o10 11z0 1o10 11z0 1o10 11z0 1qN0 WL0 1qN0 11z0 1o10 11z0 1o10 11z0 1o10 11z0 1o10 1fz0 1cN0 1cL0 1cN0 1cL0 1cN0 1cL0 1cN0 1cL0 1cN0 1fz0 1cN0 1cL0 1cN0 1cL0 1cN0 1cL0 1cN0 1cL0 1cN0 1fz0 1a10 1fz0 1cN0 1cL0 1cN0 1cL0 1cN0 1cL0 1cN0 1cL0 1cN0 1fz0 1cN0 1cL0 1cN0 1cL0 s10 1Vz0 LB0 1BX0 1cN0 1fz0 1a10 1fz0 1cN0 1cL0 1cN0 1cL0 1cN0 1cL0 1cN0 1cL0 1cN0 1fz0 1a10 1fz0 1cN0 1cL0 1cN0 1cL0 1cN0 1cL0 14p0 1lb0 14p0 1nX0 11B0 1nX0 11B0 1nX0 14p0 1lb0 14p0 1lb0 14p0 1nX0 11B0 1nX0 11B0 1nX0 14p0 1lb0 14p0 1lb0 14p0 1lb0 14p0 1nX0 11B0 1nX0 11B0 1nX0 14p0 1lb0 14p0 1lb0 14p0 1nX0 11B0 1nX0 11B0 1nX0 Rd0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0 Op0 1zb0|92e5");
     }
     createFilter(morning, evening) {
         let f1;
         let f2;
-        if (morning == 0 || morning == "MORNING OK")
+        if (morning == 0)
             f1 = (sec) => true;
         else {
-            const morningTime = __WEBPACK_IMPORTED_MODULE_1_moment_timezone__(morning.slice(1), "hh a");
-            console.log("MORNING: ", morningTime.format());
+            const morningTime = __WEBPACK_IMPORTED_MODULE_1_moment_timezone__(morning, "hh a");
             f1 = (sec) => {
-                console.log("Section: ", __WEBPACK_IMPORTED_MODULE_1_moment_timezone__(sec.meetings.range.from).tz("'America/Chicago'").format());
-                console.log("MorningTime: ", morningTime.format());
-                return __WEBPACK_IMPORTED_MODULE_1_moment_timezone__(sec.meetings.range.from).tz("'America/Chicago'") >= morningTime;
+                return __WEBPACK_IMPORTED_MODULE_1_moment_timezone__(sec.meetings.time.from, "hh:mm A") >= morningTime;
             };
         }
-        if (evening == 7 || evening == "EVENING OK")
+        if (evening == 7)
             f2 = (sec) => true;
         else {
-            const eveningTime = __WEBPACK_IMPORTED_MODULE_1_moment_timezone__(evening.slice(1), "hh a");
+            const eveningTime = __WEBPACK_IMPORTED_MODULE_1_moment_timezone__(evening, "hh a");
             f2 = (sec) => {
-                console.log("Section: ", __WEBPACK_IMPORTED_MODULE_1_moment_timezone__(sec.meetings.range.to).format());
-                console.log("Evening: ", eveningTime.format());
-                return __WEBPACK_IMPORTED_MODULE_1_moment_timezone__(sec.meetings.range.to).tz("'America/Chicago'") <= eveningTime;
+                return __WEBPACK_IMPORTED_MODULE_1_moment_timezone__(sec.meetings.time.to, "hh:mm A") <= eveningTime;
             };
         }
         return (section) => f1(section) && f2(section);
@@ -34057,4 +34050,4 @@ const EXCEPTIONS = {
 /***/ })
 
 /******/ });
-//# sourceMappingURL=66e262697a45b10bd200.worker.js.map
+//# sourceMappingURL=6359a92a0b40c9524d13.worker.js.map
