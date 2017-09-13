@@ -117,6 +117,19 @@ i {
     padding-bottom: 1.5em;
 }
 
+/* =====Schedule Waiting Property===== */
+.schedule-waiting-image {
+    width: 80%;
+    margin: auto;
+    display: block;
+}
+
+.schedule-waiting {
+    margin-top: 5em;
+    height: 100%;
+    margin-bottom: 5em;
+}
+
 /* =====Body Property===== */
 body{ /* This is erquired for a sticky footer */
     position: relative;
@@ -227,11 +240,11 @@ footer { /* This is required for a sticky footer */
 }
 
 .noUi-handle:hover {
-    background-color: #FFFFFF;
+    background-color: #212121;
     height: 2em !important;
-    width: 2em !important;
+    width: 1em !important;
     top: -1em !important;
-    left: -1em !important;
+    left: -0.5em !important;
     border-radius: 1em;
     border-width: .1em;
     border-color: #212121;
@@ -246,19 +259,26 @@ footer { /* This is required for a sticky footer */
 
 .noUi-tooltip {
     border: 0;
-    color: #616161;
+    color: #9E9E9E;
     font-size: 1em;
     padding: 0;
     background-color: transparent;
     bottom: -1.75em !important;
+    transition-delay: 0s;
+    transition-duration: 0.2s;
+    transition-property: all;
+    transition-timing-function: ease-in-out;
 }
+
+.noUi-tooltip:hover {
+    color: #212121;
+}    
 
 .form-slider {
     padding-top: .01em;
     padding-bottom: .01em !important;
     margin-bottom: 2em;
 }
-
 
 /* 
 .noUi-handle::before {

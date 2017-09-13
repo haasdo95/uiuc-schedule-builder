@@ -71,7 +71,9 @@
     </div>
     <!-- display waiting -->
     <div *ngSwitchCase="ScheduleMode.WAITING">
-        <img class="img-fluid" src="assets/push_calendar.png" alt="Bad Network Connection?...">
+        <div class="schedule-waiting">
+            <img class="img-fluid schedule-waiting-image" src="assets/push_calendar_2.svg" alt="Bad Network Connection?...">
+        </div>
     </div>
     <!-- SOMETHING IS WRONG -->
     <div *ngSwitchDefault>
