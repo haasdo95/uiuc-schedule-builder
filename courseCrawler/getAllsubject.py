@@ -35,6 +35,6 @@ def get_all_subject(insertDB):
     a = detailGetter.run_getter()
     all_detail = JsonDumper(a)
 
-    all_detail.dump('allCourses.json', True)
+    all_detail.dump('allCourses.json', insertDB)
 
     print('Time used: ', time.time() - start)
